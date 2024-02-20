@@ -1,21 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace PatientManagement.Models.DataEntites
 {
     public class Patient
     {
+        [Key]
 
-        public string? Id { get; }
+        public string Id { get; set; }
+        [Required]
         public string Name { get; set; }
         public int Age { get; set; }
         public string Gender { get; set; }
 
-        public DateOnly? DateCreated { get; }
+        public DateTime? DateCreated { get; set; }
         public ObservableCollection<Visit> Visits { get; set; } = new ObservableCollection<Visit>();
     }
 }

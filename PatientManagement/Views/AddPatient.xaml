@@ -1,0 +1,75 @@
+﻿<Window x:Class="PatientManagement.Views.AddPatient"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:localViews="clr-namespace:PatientManagement.Views"
+        xmlns:local="clr-namespace:PatientManagement.Converters"
+        mc:Ignorable="d"
+        Title="AddPatient" Height="400" Width="400">
+    <Window.Resources>
+        <local:RadioButtonConverter  x:Key="RadioButtonConverter" />
+    </Window.Resources>
+    <Grid RenderTransformOrigin="0.398,0.74">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="220"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="80"/>
+
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" FontWeight="Bold" FontSize="20">
+            <TextBlock.Text>Add Patient</TextBlock.Text>
+        </TextBlock>
+        <Grid Grid.Row="1" >
+            <Grid.Height>200</Grid.Height>
+            <Grid.VerticalAlignment>Top</Grid.VerticalAlignment>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Name"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Age"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Gender"/>
+
+            <TextBox
+                Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                Grid.Row="0" Grid.Column="1" Name="name"  MinWidth="100">
+
+            </TextBox>
+            <TextBox
+                Name="age"
+                 PreviewTextInput="age_PreviewTextInput"
+                Text="{Binding Age, UpdateSourceTrigger=PropertyChanged}"
+                Grid.Row="1" Grid.Column="1"   MinWidth="100"/>
+            <Grid Grid.Row="2" Grid.Column="1">
+                <Grid.Width>250</Grid.Width>
+                <Grid.VerticalAlignment>Center</Grid.VerticalAlignment>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <RadioButton
+                    IsChecked="{Binding SelectedGender, Converter={StaticResource RadioButtonConverter}, ConverterParameter=Male,Mode=TwoWay}"
+                    Grid.Row="0" Grid.Column="0" GroupName="genderSelect" Content="Male" />
+                <RadioButton
+                    IsChecked="{Binding SelectedGender, Converter={StaticResource RadioButtonConverter}, ConverterParameter=Female,Mode=TwoWay}"
+                    Grid.Row="0" Grid.Column="1" GroupName="genderSelect" Content="Female" />
+                <RadioButton 
+                    IsChecked="{Binding SelectedGender, Converter={StaticResource RadioButtonConverter}, ConverterParameter=Other,Mode=TwoWay}"
+                    Grid.Row="0" Grid.Column="2" x:Name="other" GroupName="genderSelect" Content="Other" />
+
+            </Grid>
+
+        </Grid>
+        <TextBlock Grid.Row="2" x:Name="errorMessage" Text="{Binding ErrorMessage,UpdateSourceTrigger=PropertyChanged}" Foreground="Red"  />
+        <Button x:Name="submit" Command="{Binding AddPatientCommand}"  Grid.Row="3" Content="Submit" VerticalAlignment="Top" Padding="10"/>
+    </Grid>
+</Window>

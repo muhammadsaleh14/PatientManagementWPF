@@ -8,7 +8,7 @@ namespace PatientManagement.Models
 {
     public class Prescription
     {
-        public string Id { get; }
+        public string Id { get; set; }
         public string PrescriptionValue { get; set; }
     }
 

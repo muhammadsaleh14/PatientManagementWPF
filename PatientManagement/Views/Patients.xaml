@@ -1,0 +1,56 @@
+﻿<Window x:Class="PatientManagement.Views.Patients"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:components ="clr-namespace:PatientManagement.Views.Components" 
+        mc:Ignorable="d"
+Title="Window1" Height="450" Width="800">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <!--<RowDefinition Height="70"/>-->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0"
+                   FontSize="24"          
+                   FontWeight="Bold"> 
+        Patients Managemnent
+        </TextBlock>
+        <!--<Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Command="{Binding ShowAddPatient}">
+                <Button.Margin>40 20</Button.Margin>
+                <Button.Content>Add new Patient</Button.Content>
+            </Button>
+            <TextBlock Grid.Column="1">
+                <TextBlock.Text>Patients List</TextBlock.Text>
+            </TextBlock>
+        </Grid>-->
+        <Grid Grid.Row="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <StackPanel Orientation="Vertical">
+                        <Button Grid.Column="0" Command="{Binding ShowAddPatient}"
+                                HorizontalAlignment="Right">
+                            <!--<Button.Margin></Button.Margin>-->
+                            <Button.Content>Add new Patient</Button.Content>
+                        </Button>
+                        <components:PatientsList/>
+                    </StackPanel>
+                </Grid>
+
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
