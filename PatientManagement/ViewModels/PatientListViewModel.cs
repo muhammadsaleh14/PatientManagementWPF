@@ -2,7 +2,6 @@
 using PatientManagement.Models.DataEntites;
 using PatientManagement.Models.DataManager;
 using PatientManagement.Stores;
-using PatientManagement.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -31,14 +30,25 @@ namespace PatientManagement.ViewModels
 
         private PatientStore _patientStore;
 
-        public PatientListViewModel() { }
         public PatientListViewModel(PatientStore patientStore)
         {
             _patientStore = patientStore;
             _patients = new ObservableCollection<Patient>(PatientManager.getPatientsFromDb() ?? Enumerable.Empty<Patient>());
             ShowAddPatient = new RelayCommand(showAddPatientWindow);
+
             AddVisitCommand = new RelayCommand(AddVisit);
 
+            _patientStore.PatientCreated += OnPatientCreated;
+        }
+
+        private void showAddPatientWindow(object obj)
+        {
+            _patientStore.AddPatientWindowOpen(_patientStore);
+        }
+
+        private void OnPatientCreated(Patient newPatient)
+        {
+            _patients.Add(newPatient);
         }
 
         private ObservableCollection<Patient> _patients;
@@ -86,12 +96,6 @@ namespace PatientManagement.ViewModels
             catch (Exception ex) { }
         }
 
-        private void showAddPatientWindow(object obj)
-        {
-            Console.WriteLine("show patient add window");
-            AddPatient addPatientWin = new AddPatient();
-            addPatientWin.ShowDialog();
-        }
 
     }
 }
