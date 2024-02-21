@@ -5,6 +5,7 @@ using PatientManagement.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace PatientManagement.ViewModels
@@ -27,11 +28,33 @@ namespace PatientManagement.ViewModels
         private PatientViewModel()
         {
             Patients = new ObservableCollection<Patient>(PatientManager.getPatientsFromDb());
+            PatientVisits = new ObservableCollection<Visit>(VisitManager.getVisitsFromDb(SelectedPatientId) ?? Enumerable.Empty<Visit>());
             ShowAddPatient = new RelayCommand(showAddPatientWindow);
             AddVisitCommand = new RelayCommand(AddVisit);
 
         }
-        public ObservableCollection<Patient> Patients { get; set; }
+
+        private ObservableCollection<Patient> _patients;
+        public ObservableCollection<Patient> Patients
+        {
+            get { return _patients; }
+            set
+            {
+                _patients = value;
+                OnPropertyChanged(nameof(Patients));
+            }
+        }
+
+        private ObservableCollection<Visit> _patientVisits;
+        public ObservableCollection<Visit> PatientVisits
+        {
+            get { return _patientVisits; }
+            set
+            {
+                _patientVisits = value;
+                OnPropertyChanged(nameof(PatientVisits));
+            }
+        }
 
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -65,7 +88,16 @@ namespace PatientManagement.ViewModels
 
         private void AddVisit(Object obj)
         {
-            VisitManager.AddVisitToPatient(SelectedPatientId);
+            try
+            {
+                Visit? newVisit = VisitManager.AddVisitToPatient(SelectedPatientId);
+                if (newVisit != null)
+                {
+                    PatientVisits.Add(newVisit);
+                }
+
+            }
+            catch (Exception ex) { }
         }
 
         private void showAddPatientWindow(object obj)
