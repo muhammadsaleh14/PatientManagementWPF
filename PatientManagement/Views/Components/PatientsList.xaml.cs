@@ -12,13 +12,12 @@ namespace PatientManagement.Views.Components
         public PatientsList()
         {
             InitializeComponent();
-            this.DataContext = PatientViewModel.Instance;
         }
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (sender is ListView listView && listView.SelectedItem is Patient selectedPatient)
             {
-                if (DataContext is PatientViewModel patientViewModel)
+                if (DataContext is PatientListViewModel patientViewModel)
                 {
                     patientViewModel.SelectedPatientId = selectedPatient.Id; // Update the selected patient's ID property in the view model
                 }

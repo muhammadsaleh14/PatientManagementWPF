@@ -1,6 +1,7 @@
 ﻿using PatientManagement.Commands;
 using PatientManagement.Models.DataEntites;
 using PatientManagement.Models.DataManager;
+using PatientManagement.Stores;
 using PatientManagement.Views;
 using System;
 using System.Collections.ObjectModel;
@@ -10,25 +11,31 @@ using System.Windows.Input;
 
 namespace PatientManagement.ViewModels
 {
-    public class PatientViewModel : INotifyPropertyChanged
+    public class PatientListViewModel : INotifyPropertyChanged
     {
-        private static PatientViewModel? _instance;
+        //SINGLETON APPLICATION
+        //private static PatientListViewModel? _instance;
+        //public static PatientListViewModel Instance
+        //{
+        //    get
+        //    {
+        //        if (_instance == null)
+        //        {
+        //            _instance = new PatientListViewModel();
+        //        }
+        //        return _instance;
+        //    }
+        //}
+        public ICommand ShowAddPatient { get; set; }
+        public ICommand AddVisitCommand { get; set; }
 
-        public static PatientViewModel Instance
+        private PatientStore _patientStore;
+
+        public PatientListViewModel() { }
+        public PatientListViewModel(PatientStore patientStore)
         {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new PatientViewModel();
-                }
-                return _instance;
-            }
-        }
-        private PatientViewModel()
-        {
-            Patients = new ObservableCollection<Patient>(PatientManager.getPatientsFromDb());
-            PatientVisits = new ObservableCollection<Visit>(VisitManager.getVisitsFromDb(SelectedPatientId) ?? Enumerable.Empty<Visit>());
+            _patientStore = patientStore;
+            _patients = new ObservableCollection<Patient>(PatientManager.getPatientsFromDb() ?? Enumerable.Empty<Patient>());
             ShowAddPatient = new RelayCommand(showAddPatientWindow);
             AddVisitCommand = new RelayCommand(AddVisit);
 
@@ -44,26 +51,6 @@ namespace PatientManagement.ViewModels
                 OnPropertyChanged(nameof(Patients));
             }
         }
-
-        private ObservableCollection<Visit> _patientVisits;
-        public ObservableCollection<Visit> PatientVisits
-        {
-            get { return _patientVisits; }
-            set
-            {
-                _patientVisits = value;
-                OnPropertyChanged(nameof(PatientVisits));
-            }
-        }
-
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         private string? _selectedPatientId;
 
         public string? SelectedPatientId
@@ -79,12 +66,12 @@ namespace PatientManagement.ViewModels
                 }
             }
         }
-        public ICommand ShowAddPatient { get; set; }
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-
-        public ICommand AddVisitCommand { get; set; }
-
-
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         private void AddVisit(Object obj)
         {
@@ -93,9 +80,8 @@ namespace PatientManagement.ViewModels
                 Visit? newVisit = VisitManager.AddVisitToPatient(SelectedPatientId);
                 if (newVisit != null)
                 {
-                    PatientVisits.Add(newVisit);
+                    _patientStore.CreateVisit(newVisit);
                 }
-
             }
             catch (Exception ex) { }
         }

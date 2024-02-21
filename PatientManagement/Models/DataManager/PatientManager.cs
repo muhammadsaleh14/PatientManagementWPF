@@ -2,13 +2,14 @@
 using PatientManagement.Models.DataEntites;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace PatientManagement.Models.DataManager
 {
     public static class PatientManager
     {
-        public static void addPatientToDb(Patient patient)
+        public static Patient addPatientToDb(Patient patient)
         {
             using (var db = new PatientContext())
             {
@@ -17,6 +18,8 @@ namespace PatientManagement.Models.DataManager
                     patient.DateCreated = DateTime.Now;
                     db.Add(patient);
                     db.SaveChanges();
+                    Debug.WriteLine("patient id is:", patient.Id);
+                    return patient;
                 }
                 catch (Exception ex)
                 {

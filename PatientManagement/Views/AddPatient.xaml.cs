@@ -1,5 +1,4 @@
-﻿using PatientManagement.ViewModels;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 
 namespace PatientManagement.Views
@@ -10,12 +9,9 @@ namespace PatientManagement.Views
     public partial class AddPatient : Window
     {
 
-
-        AddPatientViewModel addPatientViewModel = new AddPatientViewModel();
         public AddPatient()
         {
             InitializeComponent();
-            this.DataContext = addPatientViewModel;
         }
 
         private void age_PreviewTextInput(object sender, TextCompositionEventArgs e)

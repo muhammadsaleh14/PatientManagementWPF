@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:components ="clr-namespace:PatientManagement.Views.Components" 
+        xmlns:viewmodels="clr-namespace:PatientManagement.ViewModels" 
+        d:DataContext="{d:DesignInstance Type=viewmodels:PatientListViewModel}"
         mc:Ignorable="d"
 Title="Window1" Height="450" Width="800">
 
@@ -46,7 +48,7 @@ Title="Window1" Height="450" Width="800">
                             <!--<Button.Margin></Button.Margin>-->
                             <Button.Content>Add new Patient</Button.Content>
                         </Button>
-                        <components:PatientsList/>
+                        <components:PatientsList DataContext="{Binding PatientListViewModel}"/>
                     </StackPanel>
                 </Grid>
 

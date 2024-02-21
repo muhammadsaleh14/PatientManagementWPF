@@ -1,6 +1,7 @@
 ﻿using PatientManagement.Commands;
 using PatientManagement.Models.DataEntites;
 using PatientManagement.Models.DataManager;
+using PatientManagement.Stores;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -72,8 +73,11 @@ namespace PatientManagement.ViewModels
 
         public ICommand AddPatientCommand { get; set; }
 
-        public AddPatientViewModel()
+        private PatientStore _patientStore;
+
+        public AddPatientViewModel(PatientStore patientStore)
         {
+            _patientStore = patientStore;
             Debug.WriteLine("Running addPatientConstructor");
             AddPatientCommand = new RelayCommand(AddPatient, CanAddPatient);
         }
@@ -125,7 +129,8 @@ namespace PatientManagement.ViewModels
             };
             try
             {
-                PatientManager.addPatientToDb(newPatient);
+                newPatient = PatientManager.addPatientToDb(newPatient);
+                _patientStore.CreatePatient(newPatient);
             }
             catch (Exception ex)
             {

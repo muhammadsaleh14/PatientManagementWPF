@@ -3,13 +3,19 @@ using System;
 
 namespace PatientManagement.Stores
 {
-    class PatientStore
+    public class PatientStore
     {
         public event Action<Patient> PatientCreated;
+        public event Action<Visit> VisitCreated;
 
-        public void CreatePatient(Patient patient)
+        public void CreatePatient(Patient newPatient)
         {
-            PatientCreated?.Invoke(patient);
+            PatientCreated?.Invoke(newPatient);
+        }
+
+        internal void CreateVisit(Visit newVisit)
+        {
+            VisitCreated?.Invoke(newVisit);
         }
     }
 }
