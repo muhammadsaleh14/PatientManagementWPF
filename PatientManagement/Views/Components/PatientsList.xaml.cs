@@ -1,5 +1,6 @@
 ﻿using PatientManagement.Models.DataEntites;
 using PatientManagement.ViewModels;
+using System.Diagnostics;
 using System.Windows.Controls;
 
 namespace PatientManagement.Views.Components
@@ -15,13 +16,19 @@ namespace PatientManagement.Views.Components
         }
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            //Debug.WriteLine("Selection changed" + sender);
+            var a = (ListView)sender;
+            //Debug.WriteLine("Selected value" + a.SelectedValue);
             if (sender is ListView listView && listView.SelectedItem is Patient selectedPatient)
             {
-                if (DataContext is PatientListViewModel patientViewModel)
+                Debug.WriteLine("selected item name:" + selectedPatient.Name);
+                if (DataContext is PatientListViewModel patientListViewModel)
                 {
-                    patientViewModel.SelectedPatientId = selectedPatient.Id; // Update the selected patient's ID property in the view model
+                    patientListViewModel.SelectedPatient = selectedPatient; // Update the selected patient's ID property in the view model
                 }
+
             }
+
         }
     }
 }

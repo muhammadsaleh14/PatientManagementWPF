@@ -5,9 +5,10 @@ namespace PatientManagement.Stores
 {
     public class PatientStore
     {
-        public event Action<Patient> PatientCreated;
-        public event Action<Visit> VisitCreated;
-        public event Action<PatientStore> AddPatientWindowOpened;
+        public event Action<Patient>? PatientCreated;
+        public event Action<Visit>? VisitCreated;
+        public event Action<PatientStore>? AddPatientWindowOpened;
+        public event Action<Patient?>? PatientSelectionChanged;
 
         public void CreatePatient(Patient newPatient)
         {
@@ -22,6 +23,11 @@ namespace PatientManagement.Stores
         internal void AddPatientWindowOpen(PatientStore patientStore)
         {
             AddPatientWindowOpened?.Invoke(patientStore);
+        }
+
+        internal void ChangePatientSelection(Patient? patient)
+        {
+            PatientSelectionChanged?.Invoke(patient);
         }
     }
 }

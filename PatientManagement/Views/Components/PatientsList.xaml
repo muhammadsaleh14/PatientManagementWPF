@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PatientManagement.Views.Components"
+             xmlns:viewmodels="clr-namespace:PatientManagement.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     
@@ -17,8 +18,8 @@
         </TextBlock>
 
         <ListView Grid.Row="1" 
-                  ItemsSource="{Binding Patients}" 
-                  SelectedItem="{Binding SelectedPatientId, Mode=TwoWay}" 
+                  ItemsSource="{Binding Patients}"
+                  SelectedItem="{Binding SelectedPatient, Mode=TwoWay}"
                   SelectionChanged="ListView_SelectionChanged">
             <!--<ListView.HorizontalAlignment>Stretch</ListView.HorizontalAlignment>-->
             <ListView.View>
@@ -30,13 +31,18 @@
                     <GridViewColumn Header="Options">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal" DataContext="{Binding}">
                                     <!-- Add Visit Button -->
-                                    <Button Content="Add Visit" Command="{Binding AddVisitCommand}" />
+                                    <Button Content="Add Visit" Command="{Binding Path=DataContext.AddVisitCommand, 
+                                        RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                            CommandParameter="{Binding}"/>
+
                                     <!-- Edit Button -->
-                                    <Button Content="Edit" Command="{Binding EditCommand}" Margin="0,0,5,0" />
+                                    <Button Content="Edit" Command="{Binding Path=DataContext.EditCommand, 
+                                        RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Margin="0,0,5,0" />
                                     <!-- Delete Button -->
-                                    <Button Content="Delete" Command="{Binding DeleteCommand}" Margin="0,0,5,0" />
+                                    <Button Content="Delete" Command="{Binding Path=DataContext.DeleteCommand, 
+                                        RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Margin="0,0,5,0" />
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>

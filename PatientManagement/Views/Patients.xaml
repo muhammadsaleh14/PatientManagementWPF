@@ -5,10 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:components ="clr-namespace:PatientManagement.Views.Components" 
         xmlns:viewmodels="clr-namespace:PatientManagement.ViewModels" 
-        d:datacontext="{d:designinstance type=viewmodels:patientlistviewmodel}"
         mc:Ignorable="d"
 Title="Window1" Height="450" Width="800">
-
+    <!--d:datacontext="{d:designinstance type=viewmodels:patientlistviewmodel}"-->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
@@ -50,8 +49,9 @@ Title="Window1" Height="450" Width="800">
                         </Button>
                         <components:PatientsList/>
                     </StackPanel>
-                </Grid>
 
+                </Grid>
+                <components:VisitsList HorizontalAlignment="Stretch"  Grid.Column="1"  DataContext="{Binding VisitListViewModel}" />
             </Grid>
         </Grid>
     </Grid>

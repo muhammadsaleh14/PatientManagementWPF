@@ -5,7 +5,17 @@ namespace PatientManagement.Models.DataEntites
 {
     public class Visit
     {
-        public string Id { get; set; }
+
+        public string? Id { get; set; }
+        public string? PatientId { get; set; }
+
+        public Visit(DateTime date)
+        {
+            //Id = "";
+            //PatientId = "";
+            Date = date;
+        }
+
         public DateTime Date { get; set; }
         public string? OptionalDetail { get; set; }
         public ObservableCollection<PatientHistory> PatientRecords { get; set; } = new ObservableCollection<PatientHistory>();

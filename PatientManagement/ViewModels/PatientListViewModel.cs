@@ -5,6 +5,7 @@ using PatientManagement.Stores;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 
@@ -35,21 +36,22 @@ namespace PatientManagement.ViewModels
             _patientStore = patientStore;
             _patients = new ObservableCollection<Patient>(PatientManager.getPatientsFromDb() ?? Enumerable.Empty<Patient>());
             ShowAddPatient = new RelayCommand(showAddPatientWindow);
-
             AddVisitCommand = new RelayCommand(AddVisit);
-
             _patientStore.PatientCreated += OnPatientCreated;
         }
 
-        private void showAddPatientWindow(object obj)
+        private string _lastVisit;
+
+        public string LastVisit
         {
-            _patientStore.AddPatientWindowOpen(_patientStore);
+            get { return _lastVisit; }
+            set
+            {
+                _lastVisit = value;
+                OnPropertyChanged(nameof(LastVisit));
+            }
         }
 
-        private void OnPatientCreated(Patient newPatient)
-        {
-            _patients.Add(newPatient);
-        }
 
         private ObservableCollection<Patient> _patients;
         public ObservableCollection<Patient> Patients
@@ -61,17 +63,20 @@ namespace PatientManagement.ViewModels
                 OnPropertyChanged(nameof(Patients));
             }
         }
-        private string? _selectedPatientId;
+        private Patient? _selectedPatient;
 
-        public string? SelectedPatientId
+        public Patient? SelectedPatient
         {
-            get { return _selectedPatientId; }
+            get { return _selectedPatient; }
             set
             {
-                if (_selectedPatientId != value)
+                //Debug.WriteLine("selected patient:" + _selectedPatient);
+                if (_selectedPatient != value)
                 {
-                    _selectedPatientId = value;
-                    OnPropertyChanged(nameof(SelectedPatientId));
+                    _selectedPatient = value;
+                    OnPropertyChanged(nameof(SelectedPatient));
+                    Debug.WriteLine("selection changed Id:" + _selectedPatient);
+                    _patientStore.ChangePatientSelection(_selectedPatient);
 
                 }
             }
@@ -83,15 +88,28 @@ namespace PatientManagement.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private void showAddPatientWindow(object obj)
+        {
+            _patientStore.AddPatientWindowOpen(_patientStore);
+        }
+
+        private void OnPatientCreated(Patient newPatient)
+        {
+            _patients.Add(newPatient);
+        }
         private void AddVisit(Object obj)
         {
             try
             {
-                Visit? newVisit = VisitManager.AddVisitToPatient(SelectedPatientId);
-                if (newVisit != null)
+                if (obj is Patient patient)
                 {
-                    _patientStore.CreateVisit(newVisit);
+                    Visit? newVisit = VisitManager.AddVisitToPatient(patient.Id);
+                    if (newVisit != null)
+                    {
+                        _patientStore.ChangePatientSelection(patient);
+                    }
                 }
+
             }
             catch (Exception ex) { }
         }

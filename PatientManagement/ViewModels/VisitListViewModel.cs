@@ -1,21 +1,57 @@
 ﻿using PatientManagement.Models.DataEntites;
 using PatientManagement.Models.DataManager;
+using PatientManagement.Stores;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 
 namespace PatientManagement.ViewModels
 {
-    internal class VisitListViewModel : INotifyPropertyChanged
+    public class VisitListViewModel : INotifyPropertyChanged
     {
-        private string _selectedPatientId;
-        public string SelectedPatientId
+        private PatientStore _patientStore;
+
+
+        public VisitListViewModel(Stores.PatientStore patientStore)
         {
-            get { return _selectedPatientId; }
+            _patientStore = patientStore;
+            _patientStore.PatientSelectionChanged += OnPatientSelectionChanged;
+            //_patientStore.VisitCreated += OnVisitCreated;
+            _patientVisits = new ObservableCollection<Visit>(VisitManager.getVisitsFromDb(SelectedPatient?.Id) ?? Enumerable.Empty<Visit>());
+
+        }
+
+        //private void OnVisitCreated(Visit obj)
+        //{
+        //    if (obj is Visit visit)
+        //    {
+        //        PatientVisits.Add(visit);
+        //    }
+
+        //}
+
+        private void OnPatientSelectionChanged(Patient? patient)
+        {
+            List<Visit> visits = VisitManager.getPatientsVisitFromDb(patient?.Id);
+            foreach (Visit vis in visits)
+            {
+                Debug.WriteLine("patient Visits:" + vis.Date + " detail:" + vis.OptionalDetail);
+            }
+            SelectedPatient = patient;
+            PatientVisits = new ObservableCollection<Visit>(visits);
+            //OnPropertyChanged(nameof(PatientVisits));
+        }
+
+        private Patient? _selectedPatient;
+        public Patient? SelectedPatient
+        {
+            get { return _selectedPatient; }
             set
             {
-                _selectedPatientId = value;
-                OnPropertyChanged(nameof(PatientVisits));
+                _selectedPatient = value;
+                OnPropertyChanged(nameof(SelectedPatient));
             }
         }
 
@@ -28,11 +64,6 @@ namespace PatientManagement.ViewModels
                 _patientVisits = value;
                 OnPropertyChanged(nameof(PatientVisits));
             }
-        }
-        public VisitListViewModel()
-        {
-            _patientVisits = new ObservableCollection<Visit>(VisitManager.getVisitsFromDb(SelectedPatientId) ?? Enumerable.Empty<Visit>());
-
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

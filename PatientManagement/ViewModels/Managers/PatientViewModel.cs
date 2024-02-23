@@ -8,6 +8,7 @@ namespace PatientManagement.ViewModels.Managers
     {
         public AddPatientViewModel AddPatientViewModel { get; }
         public PatientListViewModel PatientListViewModel { get; }
+        public VisitListViewModel VisitListViewModel { get; }
 
 
 
@@ -15,6 +16,7 @@ namespace PatientManagement.ViewModels.Managers
         {
             PatientStore patientStore = new PatientStore();
 
+            VisitListViewModel = new VisitListViewModel(patientStore);
             AddPatientViewModel = new AddPatientViewModel(patientStore);
             PatientListViewModel = new PatientListViewModel(patientStore);
 

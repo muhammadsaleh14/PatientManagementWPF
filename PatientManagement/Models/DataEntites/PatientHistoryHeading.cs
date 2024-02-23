@@ -2,9 +2,13 @@
 {
     public class PatientHistoryHeading
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
         public string HeadingValue { get; set; }
 
+        public PatientHistoryHeading(string headingValue)
+        {
+            HeadingValue = headingValue;
+        }
     }
 
 }

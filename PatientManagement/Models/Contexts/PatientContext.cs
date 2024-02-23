@@ -5,9 +5,13 @@ namespace PatientManagement.Models.Contexts
 {
     public class PatientContext : DbContext
     {
-        public DbSet<Patient>? Patients { get; set; }
-        public DbSet<Visit>? Visits { get; set; }
-
+        public DbSet<Patient> Patients { get; set; }
+        public DbSet<Visit> Visits { get; set; }
+        public PatientContext()
+        {
+            Patients = Set<Patient>();
+            Visits = Set<Visit>();
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite($"Data Source={ModelConfigurations.DBpath}");

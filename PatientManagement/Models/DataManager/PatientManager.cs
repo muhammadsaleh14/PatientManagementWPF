@@ -32,9 +32,18 @@ namespace PatientManagement.Models.DataManager
         {
             using (var db = new PatientContext())
             {
-                return db.Patients.ToList();
+                var patients = db.Patients != null ?
+                   db.Patients
+                              .Select(p => new Patient(p.Name, p.Age, p.Gender)
+                              {
+                                  Id = p.Id,
+                              })
+                              .ToList() :
+                   new List<Patient>();// Return an empty list if db.Patients is null
+                return patients;
             }
         }
+
 
     }
 }

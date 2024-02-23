@@ -78,14 +78,14 @@ namespace PatientManagement.ViewModels
         public AddPatientViewModel(PatientStore patientStore)
         {
             _patientStore = patientStore;
-            Debug.WriteLine("Running addPatientConstructor");
+            //Debug.WriteLine("Running addPatientConstructor");
             AddPatientCommand = new RelayCommand(AddPatient, CanAddPatient);
         }
 
         private bool CanAddPatient()
         {
             ErrorMessage = "";
-            Debug.WriteLine("running canAddPatient");
+            //Debug.WriteLine("running canAddPatient");
             if (string.IsNullOrWhiteSpace(Name))
             {
                 ErrorMessage = "Enter Name";
@@ -121,12 +121,8 @@ namespace PatientManagement.ViewModels
 
             Debug.WriteLine($"{Name} {Age} {SelectedGender}");
 
-            Patient newPatient = new Patient()
-            {
-                Name = Name.Trim(),
-                Age = int.Parse(Age),
-                Gender = SelectedGender.Trim(),
-            };
+            Patient newPatient = new Patient(name: Name.Trim(), age: int.Parse(Age), gender: SelectedGender.Trim());
+
             try
             {
                 newPatient = PatientManager.addPatientToDb(newPatient);
