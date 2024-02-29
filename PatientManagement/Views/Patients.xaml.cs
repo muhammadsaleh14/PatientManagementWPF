@@ -1,24 +1,18 @@
-﻿using PatientManagement.ViewModels.Managers;
-using System;
-using System.Windows;
+﻿using System;
+using System.Windows.Controls;
 
 namespace PatientManagement.Views
 {
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class Patients : Window
+    public partial class Patients : UserControl
     {
 
         public Patients()
         {
             InitializeComponent();
             Console.WriteLine("running application");
-            this.WindowState = WindowState.Maximized;
-
-            PatientViewModel patientViewModel = new PatientViewModel();
-            this.DataContext = patientViewModel;
-
         }
 
 

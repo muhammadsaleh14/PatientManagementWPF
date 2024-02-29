@@ -4,7 +4,7 @@ using System;
 
 namespace PatientManagement.ViewModels.Managers
 {
-    public class PatientViewModel
+    public class PatientsViewModel : ViewModelBase
     {
         public AddPatientViewModel AddPatientViewModel { get; }
         public PatientListViewModel PatientListViewModel { get; }
@@ -12,10 +12,8 @@ namespace PatientManagement.ViewModels.Managers
 
 
 
-        public PatientViewModel()
+        public PatientsViewModel(PatientStore patientStore)
         {
-            PatientStore patientStore = new PatientStore();
-
             VisitListViewModel = new VisitListViewModel(patientStore);
             AddPatientViewModel = new AddPatientViewModel(patientStore);
             PatientListViewModel = new PatientListViewModel(patientStore);

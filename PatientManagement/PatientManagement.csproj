@@ -13,12 +13,17 @@
 		</DotNetCliToolReference>
 	</ItemGroup>
   <ItemGroup>
+    <PackageReference Include="DotNetProjects.WpfToolkit.Input" Version="6.1.94" />
+    <PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" />
     <PackageReference Include="JustMock" Version="2023.3.1122.188" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.26" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.26">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Sub-Components\" />
   </ItemGroup>
 
 </Project>

@@ -11,7 +11,7 @@ namespace PatientManagement.ViewModels
 {
     public class AddPatientViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
+
 
         static string DefaultGenderValue { get; } = "Male";
         private bool isDuplicate = false;
@@ -121,7 +121,7 @@ namespace PatientManagement.ViewModels
 
             Debug.WriteLine($"{Name} {Age} {SelectedGender}");
 
-            Patient newPatient = new Patient(name: Name.Trim(), age: int.Parse(Age), gender: SelectedGender.Trim());
+            Patient newPatient = new Patient(id: null, name: Name.Trim(), age: int.Parse(Age), gender: SelectedGender.Trim());
 
             try
             {
@@ -139,7 +139,7 @@ namespace PatientManagement.ViewModels
             Age = "";
             SelectedGender = DefaultGenderValue;
         }
-
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

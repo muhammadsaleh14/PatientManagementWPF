@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace PatientManagement.Models.DataEntites
@@ -8,21 +8,21 @@ namespace PatientManagement.Models.DataEntites
     {
         [Key]
 
-        public string? Id { get; set; }
+        public string Id { get; set; }
         [Required]
         public string Name { get; set; }
         public int Age { get; set; }
         public string Gender { get; set; }
 
-        public Patient(string name, int age, string gender)
+        public Patient(string? id, string name, int age, string gender)
         {
-            //Id = "";
+            Id = id ?? Guid.NewGuid().ToString();
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Age = age;
             Gender = gender ?? throw new ArgumentNullException(nameof(gender));
         }
 
         public DateTime? DateCreated { get; set; }
-        public ObservableCollection<Visit> Visits { get; set; } = new ObservableCollection<Visit>();
+        public ICollection<Visit>? Visits;
     }
 }

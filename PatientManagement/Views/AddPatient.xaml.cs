@@ -11,7 +11,7 @@ namespace PatientManagement.Views
 
         public AddPatient()
         {
-            //data context set in PatientViewModel if code remains same
+            //data context set in PatientsViewModel if code remains same
             InitializeComponent();
         }
 

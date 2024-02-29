@@ -1,17 +1,21 @@
-﻿using PatientManagement.Models.DataEntites;
+﻿using PatientManagement.Commands;
+using PatientManagement.Models.DataEntites;
 using PatientManagement.Models.DataManager;
 using PatientManagement.Stores;
+using PatientManagement.ViewModels.Managers;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Input;
 
 namespace PatientManagement.ViewModels
 {
     public class VisitListViewModel : INotifyPropertyChanged
     {
         private PatientStore _patientStore;
+        public ICommand OpenVisitViewCommand;
 
 
         public VisitListViewModel(Stores.PatientStore patientStore)
@@ -19,13 +23,21 @@ namespace PatientManagement.ViewModels
             _patientStore = patientStore;
             _patientStore.PatientSelectionChanged += OnPatientSelectionChanged;
             //_patientStore.VisitCreated += OnVisitCreated;
-            _patientVisits = new ObservableCollection<Visit>(VisitManager.getVisitsFromDb(SelectedPatient?.Id) ?? Enumerable.Empty<Visit>());
+            _patientVisits = new ObservableCollection<Visit>(VisitManager.GetPatientVisitsFromDb(SelectedPatient?.Id) ?? Enumerable.Empty<Visit>());
+            OpenVisitViewCommand = new RelayCommand(OpenVisitView);
+        }
+
+        private void OpenVisitView(object visitId)
+        {
+            _patientStore.CurrentVisitId = (string)visitId;
+            VisitViewModel visitViewModel = new VisitViewModel(_patientStore);
+            _patientStore.ChangeViewModel(visitViewModel);
 
         }
 
-        //private void OnVisitCreated(Visit obj)
+        //private void OnVisitCreated(VisitPage obj)
         //{
-        //    if (obj is Visit visit)
+        //    if (obj is VisitPage visit)
         //    {
         //        PatientVisits.Add(visit);
         //    }
@@ -34,11 +46,12 @@ namespace PatientManagement.ViewModels
 
         private void OnPatientSelectionChanged(Patient? patient)
         {
-            List<Visit> visits = VisitManager.getPatientsVisitFromDb(patient?.Id);
-            foreach (Visit vis in visits)
-            {
-                Debug.WriteLine("patient Visits:" + vis.Date + " detail:" + vis.OptionalDetail);
-            }
+            Debug.WriteLine("OnPatientSelectionChanged:" + patient.Name);
+            IEnumerable<Visit> visits = VisitManager.GetPatientVisitsFromDb(patient?.Id) ?? Enumerable.Empty<Visit>();
+            //foreach (VisitPage vis in visits)
+            //{
+            //    Debug.WriteLine("patient Visits:" + vis.Date + " detail:" + vis.OptionalDetail);
+            //}
             SelectedPatient = patient;
             PatientVisits = new ObservableCollection<Visit>(visits);
             //OnPropertyChanged(nameof(PatientVisits));

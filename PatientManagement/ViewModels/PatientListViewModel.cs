@@ -103,9 +103,11 @@ namespace PatientManagement.ViewModels
             {
                 if (obj is Patient patient)
                 {
-                    Visit? newVisit = VisitManager.AddVisitToPatient(patient.Id);
+                    Visit? newVisit = VisitManager.AddVisitToPatient(patient.Id, "implement this");
                     if (newVisit != null)
                     {
+                        //this is a bit of a shortcut as it will refetch all the visits from the database
+                        //and also change the focus of the listView
                         _patientStore.ChangePatientSelection(patient);
                     }
                 }

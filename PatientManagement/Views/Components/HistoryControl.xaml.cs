@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace PatientManagement.Views.Components
 {
     /// <summary>
-    /// Interaction logic for PatientHistory.xaml
+    /// Interaction logic for HistoryControl.xaml
     /// </summary>
-    public partial class PatientHistory : UserControl
+    public partial class HistoryControl : UserControl
     {
-        public PatientHistory()
+        public HistoryControl()
         {
             InitializeComponent();
         }

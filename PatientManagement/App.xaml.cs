@@ -7,5 +7,6 @@ namespace PatientManagement
     /// </summary>
     public partial class App : Application
     {
+
     }
 }

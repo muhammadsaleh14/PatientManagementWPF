@@ -9,31 +9,33 @@ namespace PatientManagement.Models.DataManager
 {
     public static class VisitManager
     {
-        public static List<Visit>? getVisitsFromDb(string? patientId)
+        public static List<Visit>? GetPatientVisitsFromDb(string? patientId)
         {
             using (var db = new PatientContext())
             {
-                return db.Visits?.ToList();
+                return db.Visits?
+                    .Where(v => v.PatientId == patientId)
+                    .Select(v => new Visit(v.Id, v.PatientId, v.OptionalDetail, v.Date))
+                    .ToList();
             }
         }
-        public static Visit? AddVisitToPatient(string? patientId)
+        public static Visit? AddVisitToPatient(string? patientId, string? optionalDetail)
         {
             using (var db = new PatientContext()) // Use PatientContext instead of VisitContext
             {
                 try
                 {
-                    // Find the patient by ID
-
-                    var patient = db.Patients?.FirstOrDefault(p => p.Id == patientId);
-                    Debug.WriteLine("patient ID" + patientId + " Patient:" + patient?.Name);
-                    if (patient != null)
+                    // Find the visits by ID
+                    if (patientId != null)
                     {
-                        // Create a new instance of the Visit class
-                        Visit newVisit = new Visit(date: DateTime.Now);
+                        var visits = db.Visits;
+                        Debug.WriteLine("patient ID" + patientId);
 
-                        // Add the new visit to the patient's list of visits
-                        patient.Visits.Add(newVisit);
+                        // Create a new instance of the VisitPage class
+                        Visit newVisit = new(id: null, patientId: patientId, optionalDetail: optionalDetail, date: DateTime.Now);
 
+                        // Add the new visit to the visits's list of visits
+                        visits.Add(newVisit);
                         // Save changes to the database
                         db.SaveChanges();
 
@@ -44,8 +46,8 @@ namespace PatientManagement.Models.DataManager
                     }
                     else
                     {
-                        // Handle case where patient with given ID is not found
-                        Console.WriteLine($"Patient with ID {patientId} not found.");
+                        // Handle case where visits with given ID is not found
+                        Console.WriteLine($"Patient with ID null {patientId} not found.");
                         return null;
                     }
                 }
@@ -57,21 +59,40 @@ namespace PatientManagement.Models.DataManager
             }
         }
 
-        internal static List<Visit> getPatientsVisitFromDb(string? patientId)
+        internal static Visit getVisitDetails(string? currentVisitId)
         {
             using (var db = new PatientContext())
             {
-                // Assuming Visit has a PatientId property
-                return db.Visits
-                         .Where(v => v.PatientId == patientId)
-                         .Select(v => new Visit(v.Date)
-                         {
-                             Id = v.Id,
-                             PatientId = v.PatientId,
-                             OptionalDetail = v.OptionalDetail
-                         })
-                         .ToList();
+                // Query the database to get the visit with the specified ID
+                var visit = db.Visits.FirstOrDefault(v => v.Id == currentVisitId);
+
+                if (visit != null)
+                {
+                    // Query the database to get the patient associated with the visit
+                    var patient = db.Patients.FirstOrDefault(p => p.Id == visit.PatientId);
+
+                    if (patient != null)
+                    {
+                        // Create a new instance of the Visit class with patient details
+                        Visit visitDetails = new Visit(visit.Id, visit.PatientId, visit.OptionalDetail, visit.Date)
+                        {
+                            Patient = patient
+                        };
+
+                        return visitDetails;
+                    }
+                    else
+                    {
+                        // Handle case where patient with the associated ID is not found
+                        throw new Exception("Patient with this id does not exist");
+                    }
+                }
+                else
+                {
+                    throw new Exception("Visit with this id does not exist");
+                }
             }
+
         }
     }
 }

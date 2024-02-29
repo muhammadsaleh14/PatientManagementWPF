@@ -1,24 +1,33 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PatientManagement.Models.DataEntites
 {
     public class Visit
     {
+        [Key]
+        public string Id { get; set; }
 
-        public string? Id { get; set; }
-        public string? PatientId { get; set; }
+        [ForeignKey(nameof(Patient))]
+        public string PatientId { get; set; }
+        [Required]
+        public Patient Patient { get; set; } = null!;
 
-        public Visit(DateTime date)
+        public ICollection<History>? Histories { get; set; } = null!;
+        public ICollection<Prescription>? Prescriptions { get; set; }
+
+        public Visit(string? id, string patientId, string? optionalDetail, DateTime date)
         {
-            //Id = "";
-            //PatientId = "";
+            Id = id ?? Guid.NewGuid().ToString();
+            PatientId = patientId;
             Date = date;
+            OptionalDetail = optionalDetail;
         }
 
         public DateTime Date { get; set; }
         public string? OptionalDetail { get; set; }
-        public ObservableCollection<PatientHistory> PatientRecords { get; set; } = new ObservableCollection<PatientHistory>();
-        public ObservableCollection<Prescription> Prescriptions { get; set; } = new ObservableCollection<Prescription>();
+
     }
 }

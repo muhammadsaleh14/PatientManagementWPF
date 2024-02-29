@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PatientManagement.Models.Contexts;
 
@@ -10,9 +11,10 @@ using PatientManagement.Models.Contexts;
 namespace PatientManagement.Migrations
 {
     [DbContext(typeof(PatientContext))]
-    partial class PatientContextModelSnapshot : ModelSnapshot
+    [Migration("20240226081723_fixedErrorNowIg")]
+    partial class fixedErrorNowIg
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.26");
@@ -29,9 +31,6 @@ namespace PatientManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Dose")
-                        .IsUnique();
-
                     b.ToTable("Dosages");
                 });
 
@@ -46,9 +45,6 @@ namespace PatientManagement.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DurationTime")
-                        .IsUnique();
 
                     b.ToTable("Durations");
                 });
@@ -80,9 +76,6 @@ namespace PatientManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Detail")
-                        .IsUnique();
-
                     b.ToTable("HistoryDetails");
                 });
 
@@ -96,16 +89,7 @@ namespace PatientManagement.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Priority")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("Heading")
-                        .IsUnique();
-
-                    b.HasIndex("Priority")
-                        .IsUnique();
 
                     b.ToTable("HistoryHeadings");
                 });
@@ -121,9 +105,6 @@ namespace PatientManagement.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MedicineName")
-                        .IsUnique();
 
                     b.ToTable("Medicines");
                 });
@@ -247,7 +228,7 @@ namespace PatientManagement.Migrations
                         .IsRequired();
 
                     b.HasOne("PatientManagement.Models.DataEntites.HistoryHeading", "HistoryHeading")
-                        .WithMany("Histories")
+                        .WithMany("History")
                         .HasForeignKey("HistoryHeadingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -327,7 +308,7 @@ namespace PatientManagement.Migrations
 
             modelBuilder.Entity("PatientManagement.Models.DataEntites.HistoryHeading", b =>
                 {
-                    b.Navigation("Histories");
+                    b.Navigation("History");
                 });
 #pragma warning restore 612, 618
         }

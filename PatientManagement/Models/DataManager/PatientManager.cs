@@ -34,10 +34,7 @@ namespace PatientManagement.Models.DataManager
             {
                 var patients = db.Patients != null ?
                    db.Patients
-                              .Select(p => new Patient(p.Name, p.Age, p.Gender)
-                              {
-                                  Id = p.Id,
-                              })
+                              .Select(p => new Patient(p.Id, p.Name, p.Age, p.Gender))
                               .ToList() :
                    new List<Patient>();// Return an empty list if db.Patients is null
                 return patients;
