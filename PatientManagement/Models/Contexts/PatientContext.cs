@@ -12,9 +12,6 @@ namespace PatientManagement.Models.Contexts
 
         public DbSet<History> Histories => Set<History>();
         public DbSet<HistoryHeading> HistoryHeadings => Set<HistoryHeading>();
-        public DbSet<HistoryDetail> HistoryDetails => Set<HistoryDetail>();
-
-
         public DbSet<Prescription> Prescriptions => Set<Prescription>();
         public DbSet<Medicine> Medicines => Set<Medicine>();
         public DbSet<Dosage> Dosages => Set<Dosage>();
@@ -56,17 +53,15 @@ namespace PatientManagement.Models.Contexts
 
 
             //Histories table
-            modelBuilder.Entity<History>().HasKey(h => new { h.HistoryHeadingId, h.HistoryDetailId });
+            modelBuilder.Entity<History>().Property(h => h.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<History>().HasIndex(h => new { h.HistoryHeadingId, h.HistoryDetail }).IsUnique();
+
 
             ////HistoryHeading Table
             modelBuilder.Entity<HistoryHeading>().Property(h => h.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<HistoryHeading>().HasIndex(h => h.Heading).IsUnique();
-            modelBuilder.Entity<HistoryHeading>().HasIndex(h => h.Priority).IsUnique();
+            modelBuilder.Entity<HistoryHeading>().HasIndex(h => new { h.Heading, h.Priority }).IsUnique();
 
-
-            ////HistoryDetail Table
-            modelBuilder.Entity<HistoryDetail>().Property(h => h.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<HistoryDetail>().HasIndex(h => h.Detail).IsUnique();
 
 
             //VisitPage and history
@@ -75,8 +70,10 @@ namespace PatientManagement.Models.Contexts
                 .WithMany(h => h.Visits)
                 .UsingEntity<Dictionary<string, object>>(
                 "VisitHistory",
-                j => j.HasOne<History>().WithMany().HasForeignKey("HistoryHeadingId", "HistoryDetailId"),
+                j => j.HasOne<History>().WithMany().HasForeignKey("HistoryId"),
                 j => j.HasOne<Visit>().WithMany().HasForeignKey("VisitId"));
+            //same visit cant have two same headings
+            //but duplicate details are allowed
 
 
             //VisitPage and Prescription

@@ -7,9 +7,10 @@ namespace PatientManagement.ViewModels.Managers
     public class VisitViewModel : ViewModelBase
     {
         public PrescriptionsViewModel PrescriptionsViewModel { get; }
-
+        public HistoriesViewModel HistoriesViewModel { get; set; }
 
         private PatientStore _patientStore;
+
         private Visit _visit;
 
         public Visit Visit
@@ -23,6 +24,7 @@ namespace PatientManagement.ViewModels.Managers
         {
             _patientStore = patientStore;
             PrescriptionsViewModel = new PrescriptionsViewModel(_patientStore);
+            HistoriesViewModel = new HistoriesViewModel(_patientStore);
             _visit = VisitManager.getVisitDetails(_patientStore.CurrentVisitId);
         }
     }

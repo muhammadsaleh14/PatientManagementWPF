@@ -4,7 +4,7 @@
 
 namespace PatientManagement.Migrations
 {
-    public partial class Made_ids_nullable_in_models : Migration
+    public partial class AddVirtualKeywordToNavigationProperties : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

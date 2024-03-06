@@ -11,8 +11,8 @@ using PatientManagement.Models.Contexts;
 namespace PatientManagement.Migrations
 {
     [DbContext(typeof(PatientContext))]
-    [Migration("20240226081723_fixedErrorNowIg")]
-    partial class fixedErrorNowIg
+    [Migration("20240303124350_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,6 +31,9 @@ namespace PatientManagement.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Dose")
+                        .IsUnique();
+
                     b.ToTable("Dosages");
                 });
 
@@ -46,20 +49,30 @@ namespace PatientManagement.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DurationTime")
+                        .IsUnique();
+
                     b.ToTable("Durations");
                 });
 
             modelBuilder.Entity("PatientManagement.Models.DataEntites.History", b =>
                 {
-                    b.Property<string>("HistoryHeadingId")
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("HistoryDetailId")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("HistoryHeadingId", "HistoryDetailId");
+                    b.Property<string>("HistoryHeadingId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("HistoryDetailId");
+
+                    b.HasIndex("HistoryHeadingId");
 
                     b.ToTable("Histories");
                 });
@@ -76,6 +89,9 @@ namespace PatientManagement.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Detail")
+                        .IsUnique();
+
                     b.ToTable("HistoryDetails");
                 });
 
@@ -89,7 +105,16 @@ namespace PatientManagement.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Priority")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("Heading")
+                        .IsUnique();
+
+                    b.HasIndex("Priority")
+                        .IsUnique();
 
                     b.ToTable("HistoryHeadings");
                 });
@@ -105,6 +130,9 @@ namespace PatientManagement.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MedicineName")
+                        .IsUnique();
 
                     b.ToTable("Medicines");
                 });
@@ -182,18 +210,15 @@ namespace PatientManagement.Migrations
 
             modelBuilder.Entity("VisitHistory", b =>
                 {
+                    b.Property<string>("HistoryId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("VisitId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("HistoryHeadingId")
-                        .HasColumnType("TEXT");
+                    b.HasKey("HistoryId", "VisitId");
 
-                    b.Property<string>("HistoryDetailId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("VisitId", "HistoryHeadingId", "HistoryDetailId");
-
-                    b.HasIndex("HistoryHeadingId", "HistoryDetailId");
+                    b.HasIndex("VisitId");
 
                     b.ToTable("VisitHistory");
                 });
@@ -223,12 +248,10 @@ namespace PatientManagement.Migrations
                 {
                     b.HasOne("PatientManagement.Models.DataEntites.HistoryDetail", "HistoryDetail")
                         .WithMany()
-                        .HasForeignKey("HistoryDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HistoryDetailId");
 
                     b.HasOne("PatientManagement.Models.DataEntites.HistoryHeading", "HistoryHeading")
-                        .WithMany("History")
+                        .WithMany("Histories")
                         .HasForeignKey("HistoryHeadingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -278,15 +301,15 @@ namespace PatientManagement.Migrations
 
             modelBuilder.Entity("VisitHistory", b =>
                 {
-                    b.HasOne("PatientManagement.Models.DataEntites.Visit", null)
+                    b.HasOne("PatientManagement.Models.DataEntites.History", null)
                         .WithMany()
-                        .HasForeignKey("VisitId")
+                        .HasForeignKey("HistoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PatientManagement.Models.DataEntites.History", null)
+                    b.HasOne("PatientManagement.Models.DataEntites.Visit", null)
                         .WithMany()
-                        .HasForeignKey("HistoryHeadingId", "HistoryDetailId")
+                        .HasForeignKey("VisitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -308,7 +331,7 @@ namespace PatientManagement.Migrations
 
             modelBuilder.Entity("PatientManagement.Models.DataEntites.HistoryHeading", b =>
                 {
-                    b.Navigation("History");
+                    b.Navigation("Histories");
                 });
 #pragma warning restore 612, 618
         }

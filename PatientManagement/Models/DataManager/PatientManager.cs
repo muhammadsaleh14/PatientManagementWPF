@@ -13,18 +13,13 @@ namespace PatientManagement.Models.DataManager
         {
             using (var db = new PatientContext())
             {
-                try
-                {
-                    patient.DateCreated = DateTime.Now;
-                    db.Add(patient);
-                    db.SaveChanges();
-                    Debug.WriteLine("patient id is:", patient.Id);
-                    return patient;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Cannot insert duplicate");
-                }
+
+                patient.DateCreated = DateTime.Now;
+                db.Add(patient);
+                db.SaveChanges();
+                Debug.WriteLine("patient id is:", patient.Id);
+                return patient;
+
 
             }
         }

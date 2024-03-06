@@ -15,8 +15,8 @@ namespace PatientManagement.Models.DataEntites
         [Required]
         public Patient Patient { get; set; } = null!;
 
-        public ICollection<History>? Histories { get; set; } = null!;
-        public ICollection<Prescription>? Prescriptions { get; set; }
+        public virtual ICollection<History> Histories { get; set; } = new List<History>();
+        public ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
 
         public Visit(string? id, string patientId, string? optionalDetail, DateTime date)
         {
