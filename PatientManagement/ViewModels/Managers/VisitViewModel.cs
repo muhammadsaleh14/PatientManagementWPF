@@ -1,13 +1,17 @@
-﻿using PatientManagement.Models.DataEntites;
+﻿using PatientManagement.Commands;
+using PatientManagement.Models.DataEntites;
 using PatientManagement.Models.DataManager;
 using PatientManagement.Stores;
+using System.Windows.Input;
 
 namespace PatientManagement.ViewModels.Managers
 {
     public class VisitViewModel : ViewModelBase
     {
         public PrescriptionsViewModel PrescriptionsViewModel { get; }
-        public HistoriesViewModel HistoriesViewModel { get; set; }
+        public HistoryTableViewModel HistoriesViewModel { get; set; }
+
+        public ICommand OpenPatientsViewCommand { get; }
 
         private PatientStore _patientStore;
 
@@ -24,8 +28,15 @@ namespace PatientManagement.ViewModels.Managers
         {
             _patientStore = patientStore;
             PrescriptionsViewModel = new PrescriptionsViewModel(_patientStore);
-            HistoriesViewModel = new HistoriesViewModel(_patientStore);
+            HistoriesViewModel = new HistoryTableViewModel(_patientStore);
             _visit = VisitManager.getVisitDetails(_patientStore.CurrentVisitId);
+            OpenPatientsViewCommand = new RelayCommand(OpenPatientsView);
+        }
+
+        private void OpenPatientsView(object obj)
+        {
+            PatientsViewModel patientsViewModel = new PatientsViewModel(_patientStore);
+            _patientStore.ChangeViewModel(patientsViewModel);
         }
     }
 }

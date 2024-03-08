@@ -9,18 +9,19 @@ namespace PatientManagement.ViewModels.Items
 {
     public class HistoryItemViewModel : ViewModelBase
     {
+        private PatientStore _patientStore;
+
         private string _visitId;
 
+        private HistoryItem _historyItem;
 
-        private History _history;
-
-        public History History
+        public HistoryItem HistoryItem
         {
-            get { return _history; }
+            get { return _historyItem; }
             set
             {
                 // Perform some action, such as logging or validation
-                _history = value;
+                _historyItem = value;
 
             }
         }
@@ -58,12 +59,13 @@ namespace PatientManagement.ViewModels.Items
 
         private readonly AutoSaveTimer AutoSaveTimer;
 
-        public HistoryItemViewModel(PatientStore patientStore, History history)
+        public HistoryItemViewModel(PatientStore patientStore, HistoryItem historyItem)
         {
+            _patientStore = patientStore;
             _visitId = patientStore.CurrentVisitId ?? throw new Exception("VisitId is null in history item");
-            _history = history;
-            _historyHeading = history.HistoryHeading.Heading;
-            _historyDetail = history.HistoryDetail;
+            _historyItem = historyItem;
+            _historyHeading = historyItem.HistoryHeading.Heading;
+            _historyDetail = historyItem.Detail;
             AutoSaveTimer = new AutoSaveTimer(saveAction);
         }
 
@@ -77,7 +79,8 @@ namespace PatientManagement.ViewModels.Items
             }
             if (propertyName == nameof(HistoryDetail))
             {
-                History = HistoryManager.EditHistoryDetailForVisit(_visitId, _history.Id, textValue);
+                HistoryTable historyTable = HistoryManager.EditHistoryDetailForVisit(_visitId, _historyItem.Id, textValue);
+                _patientStore.ChangeHistoryTable(historyTable);
             }
         }
     }

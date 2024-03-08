@@ -10,7 +10,7 @@
              d:DesignWidth="800">
     <UserControl.Resources>
         <CollectionViewSource x:Key="SortedItems"
-                              Source="{Binding Histories}">
+                              Source="{Binding HistoryItems,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
             <CollectionViewSource.SortDescriptions>
                 <scm:SortDescription PropertyName="History.HistoryHeading.Priority"
                                      Direction="Ascending" />
@@ -19,7 +19,7 @@
     </UserControl.Resources>
     <StackPanel Orientation="Vertical"
                 Background="White"
-                Width="300">
+                Width="300" >
         <!-- Add New PatientHistoryHeading Button -->
         <Label  FontWeight="Bold">Patient History</Label>
         <Button Name="AddHistoryButton"
@@ -39,28 +39,32 @@
         </StackPanel>
 
         <!-- ListView -->
-        <ListView Name="PatientHistoriesListView"
-                  ItemsSource="{Binding Source={StaticResource SortedItems}}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Margin="5"
-                          HorizontalAlignment="Stretch">
-                        <StackPanel HorizontalAlignment="Stretch">
-                            <!-- Heading -->
-                            <TextBlock HorizontalAlignment="Stretch"
-                                     Text="{Binding HistoryHeading}"
-                                     FontWeight="Bold"
-                                     FontSize="16" />
+        <ScrollViewer VerticalScrollBarVisibility="Visible"
+                      MaxHeight="600">
+            <ListView Name="PatientHistoriesListView"
+                      ItemsSource="{Binding Source={StaticResource SortedItems}}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="5"
+                              HorizontalAlignment="Stretch">
+                            <StackPanel HorizontalAlignment="Stretch">
+                                <!-- Heading -->
+                                <TextBlock HorizontalAlignment="Stretch"
+                                           Text="{Binding HistoryHeading}"
+                                           FontWeight="Bold"
+                                           FontSize="16" />
 
-                            <!-- Detail -->
-                            <TextBox HorizontalAlignment="Stretch"
-                                     Text="{Binding HistoryDetail,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                     Margin="0,5,0,0" />
-                        </StackPanel>
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                                <!-- Detail -->
+                                <TextBox HorizontalAlignment="Stretch"
+                                         Text="{Binding HistoryDetail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Margin="0,5,0,0" />
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollViewer>
+
     </StackPanel>
 
     <!-- Event Trigger to Toggle Input Fields Panel Visibility -->

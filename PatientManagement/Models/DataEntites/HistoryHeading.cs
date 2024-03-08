@@ -6,7 +6,7 @@ namespace PatientManagement.Models.DataEntites
     public class HistoryHeading
     {
         public string Id { get; set; }
-        public ICollection<History> Histories { get; set; } = null!;
+        public ICollection<HistoryItem> HistoryItems { get; set; } = null!;
 
         public HistoryHeading(string? id, string heading, int priority)
         {

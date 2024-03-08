@@ -10,7 +10,9 @@ namespace PatientManagement.Models.Contexts
         public DbSet<Visit> Visits => Set<Visit>();
 
 
-        public DbSet<History> Histories => Set<History>();
+        public DbSet<HistoryTable> HistoryTables => Set<HistoryTable>();
+        public DbSet<HistoryItem> HistoryItems => Set<HistoryItem>();
+
         public DbSet<HistoryHeading> HistoryHeadings => Set<HistoryHeading>();
         public DbSet<Prescription> Prescriptions => Set<Prescription>();
         public DbSet<Medicine> Medicines => Set<Medicine>();
@@ -50,11 +52,12 @@ namespace PatientManagement.Models.Contexts
             modelBuilder.Entity<Duration>().Property(d => d.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Duration>().HasIndex(d => d.DurationTime).IsUnique();
 
+            //Historytable table
+            modelBuilder.Entity<HistoryTable>().Property(h => h.Id).ValueGeneratedOnAdd();
+            //modelBuilder.Entity<HistoryTable>().HasIndex(h => h.Visits);
 
-
-            //Histories table
-            modelBuilder.Entity<History>().Property(h => h.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<History>().HasIndex(h => new { h.HistoryHeadingId, h.HistoryDetail }).IsUnique();
+            //HistoryItem table
+            modelBuilder.Entity<HistoryItem>().Property(h => h.Id).ValueGeneratedOnAdd();
 
 
             ////HistoryHeading Table
@@ -64,16 +67,6 @@ namespace PatientManagement.Models.Contexts
 
 
 
-            //VisitPage and history
-            modelBuilder.Entity<Visit>()
-                .HasMany(v => v.Histories)
-                .WithMany(h => h.Visits)
-                .UsingEntity<Dictionary<string, object>>(
-                "VisitHistory",
-                j => j.HasOne<History>().WithMany().HasForeignKey("HistoryId"),
-                j => j.HasOne<Visit>().WithMany().HasForeignKey("VisitId"));
-            //same visit cant have two same headings
-            //but duplicate details are allowed
 
 
             //VisitPage and Prescription

@@ -1,15 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PatientManagement.Models.Contexts;
+﻿using PatientManagement.Models.Contexts;
 using PatientManagement.Models.DataEntites;
+using PatientManagement.Models.DataManager.HelperFuntions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace PatientManagement.Models.DataManager
 {
     public static class HistoryManager
     {
-        internal static History AddHistoryToVisit(PatientContext? context, string visitId, string addHistoryHeadingText, string addHistoryDetailText)
+        internal static HistoryTable AddHistoryItemToVisit(PatientContext? context, string visitId, string addHistoryHeadingText, string addHistoryDetailText)
         {
             if (string.IsNullOrWhiteSpace(addHistoryHeadingText))
             {
@@ -18,43 +17,45 @@ namespace PatientManagement.Models.DataManager
 
             using (var db = context ?? new PatientContext())
             {
-                // Check if history already exists
-                var existingHistory = db.Histories
-                    .Include(h => h.HistoryHeading)
-                    .FirstOrDefault(h =>
-                        h.HistoryHeading.Heading == addHistoryHeadingText &&
-                        h.HistoryDetail == addHistoryDetailText
-                    );
-
-                if (existingHistory == null)
-                {
-                    // If history doesn't exist, add it
-                    HistoryHeading historyHeading = HistoryHeadingManager.AddOrReturnHistoryHeading(addHistoryHeadingText, db);
-                    existingHistory = new History(null, historyHeading.Id, addHistoryDetailText)
-                    {
-                        HistoryHeading = historyHeading
-                    };
-                    db.Histories.Add(existingHistory);
-                }
-
                 // Get the visit
-                Visit? visit = db.Visits.FirstOrDefault(v => v.Id == visitId);
-                if (visit == null)
+
+                Visit visit = Helper.getVisit(db, visitId);
+
+                //Get visits HistoryTable
+                HistoryTable historyTable = HistoryTableManager.AddOrReturnUniqueHistoryTable(db, visit);
+
+                visit.HistoryTable = historyTable;
+
+                bool isHeadingAlreadyAdded = visit.HistoryTable.HistoryItems.Any(i => i.HistoryHeading.Heading == addHistoryHeadingText);
+                if (isHeadingAlreadyAdded)
                 {
-                    throw new ArgumentException("Visit does not exist", nameof(visitId));
+                    throw new Exception("Cannot add duplicate heading");
                 }
 
-                // Add the visit to the history
-                existingHistory.Visits.Add(visit);
+                //Does heading exist in the headings table
+                HistoryHeading historyHeading = HistoryHeadingManager.AddOrReturnHistoryHeading(addHistoryHeadingText, db);
+
+                if (visit.HistoryTableId == null)
+                {
+                    throw new Exception("Visits HistoryTable Id is null");
+                }
+
+                HistoryItem historyItem = new HistoryItem(null, visit.HistoryTableId, historyHeading.Id, addHistoryDetailText);
+                db.HistoryItems.Add(historyItem);
                 db.SaveChanges();
 
-                return existingHistory;
+                //visit.HistoryTable.HistoryItems.Add(historyItem);
+                //db.SaveChanges();
+
+                return visit.HistoryTable;
             }
         }
 
+
+
         //If the heading has changed make a new one or assign the existing ones's id
         //also remove the heading that was changed from the visit
-        internal static History EditHistoryHeadingForVisit(string visitId, string historyId, string newHeading)
+        internal static HistoryTable EditHistoryHeadingForVisit(string visitId, string oldHeading, string newHeading)
         {
             if (string.IsNullOrWhiteSpace(newHeading))
             {
@@ -64,35 +65,41 @@ namespace PatientManagement.Models.DataManager
             using (var db = new PatientContext())
             {
 
+                Visit visit = Helper.getVisit(db, visitId);
 
-                var visit = db.Visits.FirstOrDefault(v => v.Id == visitId);
-                if (visit == null)
-                {
-                    throw new ArgumentException("Visit does not exist", nameof(visitId));
-                }
-
-                var historyToRemove = visit.Histories.FirstOrDefault(h => h.Id == historyId);
-                if (historyToRemove == null)
-                {
-                    throw new ArgumentException("History to replace is null", nameof(historyId));
-                }
+                HistoryTable historyTable = HistoryTableManager.AddOrReturnUniqueHistoryTable(db, visit);
 
                 // Remove the history
-                visit.Histories.Remove(historyToRemove);
+                visit.HistoryTable = historyTable;
+
+                HistoryItem? historyItem = visit.HistoryTable.HistoryItems.FirstOrDefault(i => i.HistoryHeading.Heading == oldHeading);
+
+                if (historyItem == null)
+                {
+                    throw new Exception("No such history record exists:" + oldHeading);
+                }
+
+                bool isHeadingAlreadyAdded = visit.HistoryTable.HistoryItems.Any(i => i.HistoryHeading.Heading == newHeading);
+                if (isHeadingAlreadyAdded)
+                {
+                    throw new Exception("Cannot add duplicate heading");
+                }
+                HistoryHeading newHistoryHeading = HistoryHeadingManager.AddOrReturnHistoryHeading(newHeading, db);
+                historyItem.HistoryHeading = newHistoryHeading;
+
                 db.SaveChanges();
 
                 // Add a new history with the updated heading
-                var newHistory = AddHistoryToVisit(db, visitId, newHeading, historyToRemove.HistoryDetail);
 
 
-                return newHistory;
+                return visit.HistoryTable;
 
             }
         }
 
 
 
-        internal static History EditHistoryDetailForVisit(string visitId, string historyId, string newDetail)
+        internal static HistoryTable EditHistoryDetailForVisit(string visitId, string historyItemId, string newDetail)
         {
             using (var db = new PatientContext())
             {
@@ -101,66 +108,73 @@ namespace PatientManagement.Models.DataManager
                 {
                     throw new ArgumentException("New Detail is null", nameof(newDetail));
                 }
-                var visit = db.Visits
-                    .Include(v => v.Histories)
-                        .ThenInclude(h => h.HistoryHeading)
-                    .FirstOrDefault(v => v.Id == visitId);
 
-                if (visit == null)
+                Visit visit = Helper.getVisit(db, visitId);
+
+                HistoryTable historyTable = HistoryTableManager.AddOrReturnUniqueHistoryTable(db, visit);
+
+                visit.HistoryTable = historyTable;
+
+                HistoryItem? historyItem = visit.HistoryTable.HistoryItems.FirstOrDefault(i => i.Id == historyItemId);
+
+                if (historyItem == null)
                 {
-                    throw new ArgumentException("Visit does not exist", nameof(visitId));
+                    throw new Exception("No such history record exists with id:" + historyItemId);
                 }
 
-                var historyToRemove = visit.Histories.FirstOrDefault(h => h.Id == historyId);
-                if (historyToRemove == null)
-                {
-                    throw new ArgumentException("History to replace is null", nameof(historyId));
-                }
+                historyItem.Detail = newDetail;
 
-                // Store the heading for later use
-                string heading = historyToRemove.HistoryHeading.Heading;
-
-                // Remove the history
-                visit.Histories.Remove(historyToRemove);
                 db.SaveChanges();
 
                 // Add a new history with the updated detail
-                var newHistory = AddHistoryToVisit(db, visitId, heading, newDetail);
 
-                return newHistory;
+                return visit.HistoryTable;
             }
         }
 
 
 
 
-        internal static IEnumerable<History> getPatientHistoryForVisit(string visitId)
+        internal static HistoryTable getHistoryTableForVisit(string visitId)
         {
             using (var db = new PatientContext())
             {
-                return db.Histories
-                    .Include(h => h.HistoryHeading)
-                    .Where(h => h.Visits.Any(v => v.Id == visitId))
-                    //.OrderBy(h => h.HistoryHeading.Priority) // Sort by Priority in HistoryHeading
-                    .ToList();
-            }
-        }
+                Visit visit = Helper.getVisit(db, visitId);
 
-        internal static void RemoveHistoryFromVisit(string visitId, string historyId)
-        {
-            using (var db = new PatientContext())
-            {
-                var historyToRemove = db.Visits
-                .Where(v => v.Id == visitId)
-                .SelectMany(v => v.Histories)
-                .FirstOrDefault(h => h.Id == historyId);
+                HistoryTable historyTable = HistoryTableManager.ReturnHistoryTableForVisit(db, visit);
 
-                if (historyToRemove == null)
-                {
-                    throw new Exception("History to remove is null");
-                }
-                db.Entry(historyToRemove).State = EntityState.Deleted;
+
+                visit.HistoryTable = historyTable;
+
                 db.SaveChanges();
+
+                return visit.HistoryTable;
+            }
+        }
+
+        internal static HistoryTable RemoveHistoryItemFromVisit(string visitId, string historyItemId)
+        {
+            using (var db = new PatientContext())
+            {
+
+                Visit visit = Helper.getVisit(db, visitId);
+
+                HistoryTable historyTable = HistoryTableManager.AddOrReturnUniqueHistoryTable(db, visit);
+
+                visit.HistoryTable = historyTable;
+
+                HistoryItem? historyItem = visit.HistoryTable.HistoryItems.FirstOrDefault(i => i.Id == historyItemId);
+
+                if (historyItem == null)
+                {
+                    throw new Exception("No such history record exists with Id:" + historyItemId);
+                }
+
+                visit.HistoryTable.HistoryItems.Remove(historyItem);
+
+                db.SaveChanges();
+
+                return visit.HistoryTable;
 
             }
         }

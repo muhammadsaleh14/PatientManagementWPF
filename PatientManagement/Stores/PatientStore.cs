@@ -12,7 +12,12 @@ namespace PatientManagement.Stores
         public event Action<Visit>? VisitCreated;
         public event Action<PatientStore>? AddPatientWindowOpened;
         public event Action<Patient?>? PatientSelectionChanged;
+        public event Action<HistoryTable>? HistoryTableChanged;
 
+        public void ChangeHistoryTable(HistoryTable historyTable)
+        {
+            HistoryTableChanged?.Invoke(historyTable);
+        }
         public void ChangeViewModel(ViewModelBase currentViewModel)
         {
             ViewModelChanged?.Invoke(currentViewModel);

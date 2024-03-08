@@ -43,7 +43,7 @@
                 </Grid.ColumnDefinitions>
                 <Grid DataContext="{Binding PatientListViewModel}" Grid.Column="0">
                     <StackPanel Orientation="Vertical">
-                        <Button Grid.Column="0" Command="{Binding ShowAddPatient}"
+                        <Button Grid.Column="0" Command="{Binding ShowAddPatientCommand}"
                                 HorizontalAlignment="Right">
                             <!--<Button.Margin></Button.Margin>-->
                             <Button.Content>Add new Patient</Button.Content>

@@ -12,10 +12,16 @@ namespace PatientManagement.Models.DataEntites
 
         [ForeignKey(nameof(Patient))]
         public string PatientId { get; set; }
+
         [Required]
         public Patient Patient { get; set; } = null!;
 
-        public virtual ICollection<History> Histories { get; set; } = new List<History>();
+        [ForeignKey(nameof(HistoryTable))]
+        public string? HistoryTableId { get; set; }
+
+        public HistoryTable? HistoryTable { get; set; } = null!;
+
+
         public ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
 
         public Visit(string? id, string patientId, string? optionalDetail, DateTime date)

@@ -26,7 +26,7 @@ namespace PatientManagement.ViewModels
         //        return _instance;
         //    }
         //}
-        public ICommand ShowAddPatient { get; set; }
+        public ICommand ShowAddPatientCommand { get; set; }
         public ICommand AddVisitCommand { get; set; }
 
         private PatientStore _patientStore;
@@ -35,7 +35,7 @@ namespace PatientManagement.ViewModels
         {
             _patientStore = patientStore;
             _patients = new ObservableCollection<Patient>(PatientManager.getPatientsFromDb() ?? Enumerable.Empty<Patient>());
-            ShowAddPatient = new RelayCommand(showAddPatientWindow);
+            ShowAddPatientCommand = new RelayCommand(showAddPatientWindow);
             AddVisitCommand = new RelayCommand(AddVisit);
             _patientStore.PatientCreated += OnPatientCreated;
         }

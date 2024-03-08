@@ -23,6 +23,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="ATesting\" />
     <Folder Include="Views\Sub-Components\" />
   </ItemGroup>
 
