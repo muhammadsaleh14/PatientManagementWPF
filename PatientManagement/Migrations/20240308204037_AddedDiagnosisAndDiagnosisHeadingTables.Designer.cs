@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PatientManagement.Models.Contexts;
 
@@ -10,9 +11,10 @@ using PatientManagement.Models.Contexts;
 namespace PatientManagement.Migrations
 {
     [DbContext(typeof(PatientContext))]
-    partial class PatientContextModelSnapshot : ModelSnapshot
+    [Migration("20240308204037_AddedDiagnosisAndDiagnosisHeadingTables")]
+    partial class AddedDiagnosisAndDiagnosisHeadingTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.26");
@@ -52,23 +54,9 @@ namespace PatientManagement.Migrations
 
                     b.Property<string>("Heading")
                         .IsRequired()
-                        .HasColumnType("TEXT COLLATE NOCASE");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Heading")
-                        .IsUnique();
-
-                    b.HasIndex("IsActive");
-
-                    b.HasIndex("Priority")
-                        .IsUnique();
 
                     b.ToTable("DiagnosisHeadings");
                 });
@@ -117,7 +105,7 @@ namespace PatientManagement.Migrations
 
                     b.Property<string>("Heading")
                         .IsRequired()
-                        .HasColumnType("TEXT COLLATE NOCASE");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Priority")
                         .HasColumnType("INTEGER");
@@ -292,14 +280,14 @@ namespace PatientManagement.Migrations
 
             modelBuilder.Entity("PatientManagement.Models.DataEntites.Diagnosis", b =>
                 {
-                    b.HasOne("PatientManagement.Models.DataEntites.DiagnosisHeading", "DiagnosisHeading")
-                        .WithMany("Diagnoses")
+                    b.HasOne("PatientManagement.Models.DataEntites.Visit", "DiagnosisHeading")
+                        .WithMany()
                         .HasForeignKey("DiagnosisHeadingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PatientManagement.Models.DataEntites.Visit", "Visit")
-                        .WithMany("Diagnoses")
+                        .WithMany()
                         .HasForeignKey("VisitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -387,11 +375,6 @@ namespace PatientManagement.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PatientManagement.Models.DataEntites.DiagnosisHeading", b =>
-                {
-                    b.Navigation("Diagnoses");
-                });
-
             modelBuilder.Entity("PatientManagement.Models.DataEntites.HistoryHeading", b =>
                 {
                     b.Navigation("HistoryItems");
@@ -402,11 +385,6 @@ namespace PatientManagement.Migrations
                     b.Navigation("HistoryItems");
 
                     b.Navigation("Visits");
-                });
-
-            modelBuilder.Entity("PatientManagement.Models.DataEntites.Visit", b =>
-                {
-                    b.Navigation("Diagnoses");
                 });
 #pragma warning restore 612, 618
         }

@@ -22,6 +22,7 @@ namespace PatientManagement.Models.DataEntites
         public HistoryTable? HistoryTable { get; set; } = null!;
 
 
+        public ICollection<Diagnosis> Diagnoses { get; set; } = new List<Diagnosis>();
         public ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
 
         public Visit(string? id, string patientId, string? optionalDetail, DateTime date)

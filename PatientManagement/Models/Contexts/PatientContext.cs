@@ -12,8 +12,14 @@ namespace PatientManagement.Models.Contexts
 
         public DbSet<HistoryTable> HistoryTables => Set<HistoryTable>();
         public DbSet<HistoryItem> HistoryItems => Set<HistoryItem>();
-
         public DbSet<HistoryHeading> HistoryHeadings => Set<HistoryHeading>();
+
+
+        public DbSet<Diagnosis> Diagnoses => Set<Diagnosis>();
+        public DbSet<DiagnosisHeading> DiagnosisHeadings => Set<DiagnosisHeading>();
+
+
+
         public DbSet<Prescription> Prescriptions => Set<Prescription>();
         public DbSet<Medicine> Medicines => Set<Medicine>();
         public DbSet<Dosage> Dosages => Set<Dosage>();
@@ -28,12 +34,13 @@ namespace PatientManagement.Models.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //patient Table
-            modelBuilder.Entity<Patient>().Property(p => p.Name).HasColumnType("TEXT COLLATE NOCASE");
+            modelBuilder.Entity<Patient>().Property(p => p.Name).HasColumnType("TEXT COLLATE NOCASE");//makes it case insensitive
             modelBuilder.Entity<Patient>().Property(p => p.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Patient>().HasIndex(p => new { p.Name, p.Gender, p.Age }).IsUnique();
 
-            //VisitPage table
+            //Visit table
             modelBuilder.Entity<Visit>().Property(v => v.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Visit>().HasIndex(v => v.HistoryTableId);
 
 
 
@@ -52,18 +59,32 @@ namespace PatientManagement.Models.Contexts
             modelBuilder.Entity<Duration>().Property(d => d.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Duration>().HasIndex(d => d.DurationTime).IsUnique();
 
+
             //Historytable table
             modelBuilder.Entity<HistoryTable>().Property(h => h.Id).ValueGeneratedOnAdd();
-            //modelBuilder.Entity<HistoryTable>().HasIndex(h => h.Visits);
+            //modelBuilder.Entity<HistoryTable>().HasIndex(h => h.visit);
 
             //HistoryItem table
             modelBuilder.Entity<HistoryItem>().Property(h => h.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<HistoryItem>().HasIndex(h => h.HistoryTableId);
 
-
-            ////HistoryHeading Table
+            //HistoryHeading Table
             modelBuilder.Entity<HistoryHeading>().Property(h => h.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<HistoryHeading>().HasIndex(h => h.Heading).IsUnique();
             modelBuilder.Entity<HistoryHeading>().HasIndex(h => new { h.Heading, h.Priority }).IsUnique();
+            modelBuilder.Entity<HistoryHeading>().Property(h => h.Heading).HasColumnType("TEXT COLLATE NOCASE");//makes it case insensitive
+
+            //Diagnosis table
+            modelBuilder.Entity<Diagnosis>().Property(d => d.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Diagnosis>().HasIndex(d => d.VisitId);
+
+
+            //DiagnosisHeading table
+            modelBuilder.Entity<DiagnosisHeading>().Property(d => d.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<DiagnosisHeading>().HasIndex(d => d.Heading).IsUnique();
+            modelBuilder.Entity<DiagnosisHeading>().HasIndex(d => d.Priority).IsUnique();
+            modelBuilder.Entity<DiagnosisHeading>().Property(d => d.Heading).HasColumnType("TEXT COLLATE NOCASE");//makes it case insensitive
+            modelBuilder.Entity<DiagnosisHeading>().HasIndex(d => d.IsActive);
 
 
 

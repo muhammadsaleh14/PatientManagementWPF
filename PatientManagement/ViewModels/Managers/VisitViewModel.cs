@@ -11,6 +11,8 @@ namespace PatientManagement.ViewModels.Managers
         public PrescriptionsViewModel PrescriptionsViewModel { get; }
         public HistoryTableViewModel HistoriesViewModel { get; set; }
 
+        public DiagnosisViewModel DiagnosisViewModel { get; set; }
+
         public ICommand OpenPatientsViewCommand { get; }
 
         private PatientStore _patientStore;
@@ -29,6 +31,7 @@ namespace PatientManagement.ViewModels.Managers
             _patientStore = patientStore;
             PrescriptionsViewModel = new PrescriptionsViewModel(_patientStore);
             HistoriesViewModel = new HistoryTableViewModel(_patientStore);
+            DiagnosisViewModel = new DiagnosisViewModel(_patientStore, false);
             _visit = VisitManager.getVisitDetails(_patientStore.CurrentVisitId);
             OpenPatientsViewCommand = new RelayCommand(OpenPatientsView);
         }

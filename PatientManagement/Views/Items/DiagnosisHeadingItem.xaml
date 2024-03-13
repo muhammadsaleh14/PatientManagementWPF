@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="PatientManagement.Views.Items.DiagnosisHeadingItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:PatientManagement.Views.Items"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             mc:Ignorable="d"
+             d:DesignHeight="100"
+             d:DesignWidth="200">
+    <StackPanel Background="White">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition  Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock x:Name="textBlockHeading"
+                       HorizontalAlignment="Stretch"
+                       Grid.Column="0"
+                       FontWeight="Bold"
+                       Text="{Binding DiagnosisHeading.Heading}"
+                       TextWrapping="NoWrap" />
+            <TextBox x:Name="textBoxHeading"
+                     HorizontalAlignment="Stretch"
+                     Grid.Column="0"
+                     Visibility="Collapsed"
+                     Text="{Binding DiagnosisHeading.Heading}" />
+
+            <Button x:Name="editHeadingBtn"
+                    Grid.Column="1"
+                    Command="{Binding EditHeadingCommand}"
+                    Click="editHeadingBtn_Click">
+                <fa:FontAwesome FontSize="16"
+                                Icon="Edit" />
+            </Button>
+
+
+        </Grid>
+        <Button x:Name="submitNewHeadingBtn"
+                Click="submitNewHeadingBtn_Click"
+                Command="{Binding EditHeadingCommand}"
+                CommandParameter="{Binding}"
+                Content="Submit" />
+    </StackPanel>
+</UserControl>

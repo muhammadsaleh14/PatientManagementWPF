@@ -1,31 +1,46 @@
-﻿using PatientManagement.Stores;
+﻿using PatientManagement.Commands;
+using PatientManagement.Stores;
 using PatientManagement.Views;
 using System;
+using System.Windows.Input;
 
 namespace PatientManagement.ViewModels.Managers
 {
     public class PatientsViewModel : ViewModelBase
     {
-        public AddPatientViewModel AddPatientViewModel { get; }
+
+        private PatientStore _patientStore { get; }
+        //public AddPatientViewModel AddPatientViewModel { get; }
         public PatientListViewModel PatientListViewModel { get; }
         public VisitListViewModel VisitListViewModel { get; }
 
-
+        public ICommand ShowManagerCommand { get; }
 
         public PatientsViewModel(PatientStore patientStore)
         {
+            _patientStore = patientStore;
             VisitListViewModel = new VisitListViewModel(patientStore);
-            AddPatientViewModel = new AddPatientViewModel(patientStore);
+            //AddPatientViewModel = new AddPatientViewModel(_patientStore);
             PatientListViewModel = new PatientListViewModel(patientStore);
 
-            patientStore.AddPatientWindowOpened += openAddPatientWindow;
+
+            ShowManagerCommand = new RelayCommand(ShowManagerWindow);
+            patientStore.AddPatientWindowOpened += ShowAddPatientWindow;
         }
 
-        private void openAddPatientWindow(PatientStore patientStore)
+        private void ShowManagerWindow(object obj)
+        {
+            ManagerWindow managerWindow = new ManagerWindow();
+            managerWindow.DataContext = new ManagerViewModel(_patientStore);
+            managerWindow.ShowDialog();
+        }
+
+        private void ShowAddPatientWindow(PatientStore patientStore)
         {
             Console.WriteLine("show patient add window");
             AddPatient addPatientWin = new AddPatient();
-            addPatientWin.DataContext = AddPatientViewModel;
+            AddPatientViewModel addPatientViewModel = new AddPatientViewModel(patientStore);
+            addPatientWin.DataContext = addPatientViewModel;
             addPatientWin.ShowDialog();
         }
     }
