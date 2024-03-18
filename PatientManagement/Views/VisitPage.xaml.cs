@@ -11,5 +11,7 @@ namespace PatientManagement.Views
         {
             InitializeComponent();
         }
+
+
     }
 }

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -16,6 +17,7 @@ namespace PatientManagement.ViewModels
     public class DiagnosisViewModel : ViewModelBase
     {
         private PatientStore _patientStore;
+
 
         public ICommand AddDiagnosisHeadingCommand { get; }
 
@@ -46,12 +48,30 @@ namespace PatientManagement.ViewModels
             }
         }
 
+        private bool _showDisabledHeadings;
 
-        private ObservableCollection<DiagnosisHeadingViewModel> _activeDiagnosisHeadings;
-        public ObservableCollection<DiagnosisHeadingViewModel> ActiveDiagnosisHeadings
+        public bool ShowDisabledHeadings
         {
-            get { return _activeDiagnosisHeadings; }
-            set { _activeDiagnosisHeadings = value; }
+            get { return _showDisabledHeadings; }
+            set
+            {
+                if (_showDisabledHeadings != value)
+                {
+                    _showDisabledHeadings = value;
+                    OnPropertyChanged(nameof(ShowDisabledHeadings));
+                    // Update visibility of items when checkbox state 
+                }
+            }
+        }
+        private ObservableCollection<DiagnosisHeadingViewModel> _allDiagnosisHeadings;
+        public ObservableCollection<DiagnosisHeadingViewModel> AllDiagnosisHeadings
+        {
+            get { return _allDiagnosisHeadings; }
+            set
+            {
+                _allDiagnosisHeadings = value;
+                OnPropertyChanged(nameof(AllDiagnosisHeadings));
+            }
         }
 
 
@@ -65,24 +85,30 @@ namespace PatientManagement.ViewModels
             }
         }
 
-
         public DiagnosisViewModel(PatientStore patientStore, bool isConfigWindow)
         {
             _patientStore = patientStore;
             _addDiagnosisHeadingText = string.Empty;
-            _activeDiagnosisHeadings = new ObservableCollection<DiagnosisHeadingViewModel>();
+            _allDiagnosisHeadings = new ObservableCollection<DiagnosisHeadingViewModel>();
+
             AddDiagnosisHeadingCommand = new RelayCommand(AddDiagnosisHeading, CanAddDiagnosisHeading);
             if (!isConfigWindow)
             {
+
                 string currentVisitId = _patientStore.CurrentVisitId ?? throw new Exception("Visitid is not availible for diagnosis");
                 _diagnosisItems = DiagnosisItemViewModelProjection(DiagnosisManager.getDiagnosisForVisit(currentVisitId));
-
             }
             else
             {
-                _activeDiagnosisHeadings = DiagnosisHeadingViewModelProjection(DiagnosisManager.getDiagnosisHeadings());
+                _patientStore.DiagnosisHeadingPriorityChanged += RefreshDiagnosisHeadingList;
+                _allDiagnosisHeadings = DiagnosisHeadingViewModelProjection(DiagnosisManager.getAllDiagnosisHeadings());
 
             }
+        }
+
+        private void RefreshDiagnosisHeadingList()
+        {
+            AllDiagnosisHeadings = DiagnosisHeadingViewModelProjection(DiagnosisManager.getAllDiagnosisHeadings());
         }
 
         private bool CanAddDiagnosisHeading()
@@ -102,7 +128,14 @@ namespace PatientManagement.ViewModels
             try
             {
                 DiagnosisHeading diagnosisHeading = DiagnosisManager.AddDiagnosisHeading(AddDiagnosisHeadingText);
-                ActiveDiagnosisHeadings.Add(new DiagnosisHeadingViewModel(_patientStore, diagnosisHeading));
+
+                var itemToRemove = AllDiagnosisHeadings.FirstOrDefault(diagnosisViewModel => diagnosisViewModel.DiagnosisHeading.Id == diagnosisHeading.Id);
+                if (itemToRemove != null)
+                {
+                    AllDiagnosisHeadings.Remove(itemToRemove);
+                }
+
+                AllDiagnosisHeadings.Add(new DiagnosisHeadingViewModel(_patientStore, diagnosisHeading));
                 AddDiagnosisHeadingText = string.Empty;
 
             }

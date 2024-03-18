@@ -21,12 +21,22 @@ namespace PatientManagement.ViewModels.Managers
         public MainViewModel()
         {
             _patientStore = new PatientStore();
+            //DiagnosisManager.sortPriorities();
+
             _patientStore.ViewModelChanged += OnCurrentViewModelChanged;
             _currentViewModel = new PatientsViewModel(_patientStore);
         }
 
         private void OnCurrentViewModelChanged(ViewModelBase newCurrentViewModel)
         {
+            if (_currentViewModel is VisitViewModel visitViewModel)
+            {
+                if (visitViewModel.CanCloseVisitInt != 0)
+                {
+                    return;
+                }
+
+            }
             CurrentViewModel = newCurrentViewModel;
         }
 

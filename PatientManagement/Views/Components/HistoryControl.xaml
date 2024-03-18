@@ -19,7 +19,7 @@
     </UserControl.Resources>
     <StackPanel Orientation="Vertical"
                 Background="White"
-                Width="300">
+                HorizontalAlignment="Stretch">
         <Label FontWeight="Bold">Patient History</Label>
         <Button Name="AddHistoryButton"
                 Content="View Add History"

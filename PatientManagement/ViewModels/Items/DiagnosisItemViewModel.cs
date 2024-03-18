@@ -3,6 +3,7 @@ using PatientManagement.Models.DataManager;
 using PatientManagement.Stores;
 using PatientManagement.ViewModels.Managers;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace PatientManagement.ViewModels.Items
@@ -11,41 +12,79 @@ namespace PatientManagement.ViewModels.Items
     {
         private PatientStore _patientStore;
 
-        private Diagnosis _diagnosisItem;
+        private Diagnosis _diagnosis;
 
-        public Diagnosis DiagnosisItem
+        public Diagnosis Diagnosis
         {
-            get { return _diagnosisItem; }
+            get { return _diagnosis; }
             set
             {
-                if (_diagnosisItem.Detail != value.Detail)
-                {
-                    _diagnosisItem.Detail = value.Detail;
-                    OnPropertyChanged(nameof(DiagnosisItem.Detail));
-                    AutoSaveTimer.UpdateText(nameof(DiagnosisItem.Detail), _diagnosisItem.Detail);
-                }
+                _diagnosis = value;
+                _heading = _diagnosis.DiagnosisHeading.Heading;
+                _detail = _diagnosis.Detail;
             }
         }
 
-        private readonly AutoSaveTimer AutoSaveTimer;
+
+
+        private string _heading;
+
+        public string Heading
+        {
+            get { return _heading; }
+            set
+            {
+                _heading = value;
+                OnPropertyChanged(nameof(Heading));
+            }
+        }
+
+        private string _detail;
+        public string Detail
+        {
+            get { return _detail; }
+            set
+            {
+                _detail = value;
+                OnPropertyChanged(nameof(Detail));
+                AutoSaveTimer.UpdateText(nameof(Detail), _detail);
+            }
+        }
+
+
+        public AutoSaveTimer AutoSaveTimer { get; set; }
 
         public DiagnosisItemViewModel(PatientStore patientStore, Diagnosis diagnosis)
         {
             _patientStore = patientStore;
-            AutoSaveTimer = new AutoSaveTimer(saveAction);
-            _diagnosisItem = diagnosis;
+            AutoSaveTimer = new AutoSaveTimer(saveDiagnosisDetailAction);
+            _diagnosis = diagnosis;
+            _heading = diagnosis.DiagnosisHeading.Heading;
+            _detail = diagnosis.Detail;
+            AutoSaveTimer.PropertyChanged += AutoSaveTimerChanged;
+
+
         }
 
-        private void saveAction(string propertyName, string? textValue)
+        private void AutoSaveTimerChanged(object? sender, PropertyChangedEventArgs e)
+        {
+
+            if (sender is AutoSaveTimer autoSaveTimer && e.PropertyName == nameof(autoSaveTimer.IsSaving))
+            {
+                _patientStore.ChangeCanCloseCounter(!autoSaveTimer.IsSaving);
+            }
+        }
+
+        private void saveDiagnosisDetailAction(string propertyName, string? textValue)
         {
             Debug.WriteLine("Running save on:" + propertyName + " value is:" + textValue);
             if (textValue == null)
             {
-                throw new Exception("Parameter textValue is null for Diagnosis save action");
+                throw new Exception("Parameter textValue is null in save action for " + propertyName);
             }
-            if (propertyName == nameof(DiagnosisItem.Detail))
+            if (propertyName == nameof(Detail))
             {
-                DiagnosisItem = DiagnosisManager.EditDiagnosisDetail(DiagnosisItem.Id, textValue);
+                Diagnosis = DiagnosisManager.EditDiagnosisDetail(Diagnosis.Id, textValue);
             }
         }
 

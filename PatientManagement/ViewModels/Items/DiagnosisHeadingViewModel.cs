@@ -13,9 +13,8 @@ namespace PatientManagement.ViewModels.Items
         //All Commands that change the heading/s or priotity will be utilised by the manager view
         private PatientStore _patientStore;
 
-        public ICommand DeleteHeadingCommand;
-        public ICommand EditHeadingCommand;
-        public ICommand ChangePriorityCommand;
+        public ICommand ToggleEnabledHeadingCommand { get; }
+        public ICommand IncreasePriorityCommand { get; }
 
         private DiagnosisHeading _diagnosisHeading;
 
@@ -24,41 +23,59 @@ namespace PatientManagement.ViewModels.Items
             get { return _diagnosisHeading; }
             set
             {
-                if (_diagnosisHeading.Heading != value.Heading)
-                {
-                    _diagnosisHeading.Heading = value.Heading;
-                    OnPropertyChanged(nameof(DiagnosisHeading));
-
-                }
+                _diagnosisHeading = value;
+                OnPropertyChanged(nameof(DiagnosisHeading));
             }
         }
+
+        private string _editHeadingText;
+
+        public string EditHeadingText
+        {
+            get { return _editHeadingText; }
+            set { _editHeadingText = value; }
+        }
+
+
 
 
         public DiagnosisHeadingViewModel(PatientStore patientStore, DiagnosisHeading diagnosisHeading)
         {
             this._patientStore = patientStore;
             this._diagnosisHeading = diagnosisHeading;
-            DeleteHeadingCommand = new RelayCommand(DeleteHeading);
-            EditHeadingCommand = new RelayCommand(EditHeading);
-            ChangePriorityCommand = new RelayCommand(ChangePriority);
-        }
+            _editHeadingText = diagnosisHeading.Heading;
 
-        private void ChangePriority(object obj)
-        {
-            throw new NotImplementedException();
+            ToggleEnabledHeadingCommand = new RelayCommand(ToggleEnabledHeading);
+            IncreasePriorityCommand = new RelayCommand(IncreasePriority);
         }
 
 
-        private void EditHeading(object obj)
+
+        private void IncreasePriority(object obj)
         {
-            if (obj is DiagnosisHeadingViewModel diagnosisHeadingViewModel)
+            DiagnosisManager.IncreasePriority(DiagnosisHeading);
+            _patientStore.ChangeDiagnosisHeadingPriority();
+        }
+
+
+        private void ToggleEnabledHeading(object obj)
+        {
+            try
             {
-                DiagnosisManager.EditDiagnosisHeading(diagnosisHeadingViewModel._diagnosisHeading);
-            }
-        }
+                if (DiagnosisHeading.IsActive == true)
+                {
+                    DiagnosisHeading = DiagnosisManager.DisableHeading(DiagnosisHeading);
+                }
+                else
+                {
+                    DiagnosisHeading = DiagnosisManager.EnableHeading(DiagnosisHeading);
+                }
 
-        private void DeleteHeading(object obj)
-        {
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
         }
     }

@@ -26,23 +26,31 @@
                 <Label Content="Gender" />
                 <TextBlock Text="{Binding Visit.Patient.Gender}" />
             </StackPanel>
+
             <Button DockPanel.Dock="Right"
                     HorizontalAlignment="Right"
                     Content="Go Back "
                     Command="{Binding OpenPatientsViewCommand}">
 
             </Button>
+            <TextBlock Foreground="CornflowerBlue"
+                       FontWeight="Bold"
+                       Text="{Binding SavingText}" />
+
         </DockPanel>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="4*" />
             </Grid.ColumnDefinitions>
 
             <components:HistoryControl Grid.Column="0"
+                                       Margin="10 0"
                                        DataContext="{Binding HistoriesViewModel}" />
-
-            <StackPanel Grid.Column="1">
+            <components:DiagnosisControl Grid.Column="1" />
+            <StackPanel Grid.Column="2"
+                        Margin="20,0,0,0">
                 <components:Prescriptions DataContext="{Binding PrescriptionsViewModel}" />
             </StackPanel>
 

@@ -3,6 +3,7 @@ using PatientManagement.Models.DataManager;
 using PatientManagement.Stores;
 using PatientManagement.ViewModels.Managers;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace PatientManagement.ViewModels.Items
@@ -67,6 +68,16 @@ namespace PatientManagement.ViewModels.Items
             _historyHeading = historyItem.HistoryHeading.Heading;
             _historyDetail = historyItem.Detail;
             AutoSaveTimer = new AutoSaveTimer(saveAction);
+            AutoSaveTimer.PropertyChanged += AutoSaveTimerChanged;
+
+        }
+        private void AutoSaveTimerChanged(object? sender, PropertyChangedEventArgs e)
+        {
+
+            if (sender is AutoSaveTimer autoSaveTimer && e.PropertyName == nameof(autoSaveTimer.IsSaving))
+            {
+                _patientStore.ChangeCanCloseCounter(!autoSaveTimer.IsSaving);
+            }
         }
 
         private void saveAction(string propertyName, string? textValue)

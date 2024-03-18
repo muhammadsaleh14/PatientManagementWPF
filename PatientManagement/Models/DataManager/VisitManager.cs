@@ -42,6 +42,8 @@ namespace PatientManagement.Models.DataManager
                         // Reload the new visit from the database to get the generated Id
                         db.Entry(newVisit).GetDatabaseValues();
 
+                        DiagnosisManager.CreateDiagnosisForNewVisit(newVisit.Id);
+
                         return newVisit;
                     }
                     else

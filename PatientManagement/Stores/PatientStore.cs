@@ -1,4 +1,5 @@
 ﻿using PatientManagement.Models.DataEntites;
+using PatientManagement.ViewModels.Items;
 using PatientManagement.ViewModels.Managers;
 using System;
 
@@ -13,7 +14,25 @@ namespace PatientManagement.Stores
         public event Action<PatientStore>? AddPatientWindowOpened;
         public event Action<Patient?>? PatientSelectionChanged;
         public event Action<HistoryTable>? HistoryTableChanged;
+        public event Action<DiagnosisHeadingViewModel>? DiagnosisHeadingDisabled;
+        public event Action? DiagnosisHeadingPriorityChanged;
 
+        public event Action<bool>? CanCloseCounter;
+
+        internal void ChangeDiagnosisHeadingPriority()
+        {
+            DiagnosisHeadingPriorityChanged?.Invoke();
+        }
+
+        internal void ChangeCanCloseCounter(bool canClose)
+        {
+            CanCloseCounter?.Invoke(canClose);
+        }
+
+        internal void DisableHeading(DiagnosisHeadingViewModel diagnosisHeadingViewModel)
+        {
+            DiagnosisHeadingDisabled?.Invoke(diagnosisHeadingViewModel);
+        }
         public void ChangeHistoryTable(HistoryTable historyTable)
         {
             HistoryTableChanged?.Invoke(historyTable);
@@ -41,5 +60,7 @@ namespace PatientManagement.Stores
         {
             PatientSelectionChanged?.Invoke(patient);
         }
+
+
     }
 }

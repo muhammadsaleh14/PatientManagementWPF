@@ -1,11 +1,32 @@
-﻿using System;
+﻿using PatientManagement.ViewModels.Managers;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Threading;
 
-public class AutoSaveTimer
+public class AutoSaveTimer : ViewModelBase
 {
-    private readonly DispatcherTimer timer;
+
+    public DispatcherTimer timer;
+    private bool _isSaving;
+
+    public bool IsSaving
+    {
+        get { return _isSaving; }
+        set
+        {
+            if (_isSaving != value)
+            {
+                {
+                    _isSaving = value;
+                    OnPropertyChanged(nameof(IsSaving));
+                }
+            }
+
+        }
+    }
+
+
     private readonly Action<string, string?> saveAction; // Updated Action delegate
     private Dictionary<string, string?> textToSave = new Dictionary<string, string?>();
 
@@ -15,14 +36,17 @@ public class AutoSaveTimer
         timer = new DispatcherTimer();
         timer.Interval = TimeSpan.FromSeconds(2); // Adjust as needed
         timer.Tick += Timer_Tick;
-        timer.Start();
+        _isSaving = false;
+
     }
 
     public void UpdateText(string propertyName, string text) // Updated method signature
     {
-        textToSave[propertyName] = text;
         RestartTimer();
+        IsSaving = true;
+        textToSave[propertyName] = text;
         Debug.WriteLine("Restarting timer");
+
     }
 
     private void Timer_Tick(object? sender, EventArgs e)
@@ -36,6 +60,9 @@ public class AutoSaveTimer
                 textToSave[key] = null;
             }
         }
+        IsSaving = false;
+        timer.Stop();
+        Debug.WriteLine("running timer tick");
     }
 
     private void RestartTimer()
