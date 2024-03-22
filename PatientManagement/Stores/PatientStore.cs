@@ -16,9 +16,15 @@ namespace PatientManagement.Stores
         public event Action<HistoryTable>? HistoryTableChanged;
         public event Action<DiagnosisHeadingViewModel>? DiagnosisHeadingDisabled;
         public event Action? DiagnosisHeadingPriorityChanged;
+        public event Action<Patient>? PatientEdited;
 
         public event Action<bool>? CanCloseCounter;
 
+
+        internal void EditPatient(Patient patient)
+        {
+            PatientEdited?.Invoke(patient);
+        }
         internal void ChangeDiagnosisHeadingPriority()
         {
             DiagnosisHeadingPriorityChanged?.Invoke();
@@ -61,6 +67,9 @@ namespace PatientManagement.Stores
             PatientSelectionChanged?.Invoke(patient);
         }
 
-
+        internal void EditPatient(object oldPatient, Patient newPatient)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

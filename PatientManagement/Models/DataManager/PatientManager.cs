@@ -36,6 +36,41 @@ namespace PatientManagement.Models.DataManager
             }
         }
 
+        internal static void DeletePatient(Patient patient)
+        {
+            using (var db = new PatientContext())
+            {
+                Patient? patientToDelete = db.Patients.Find(patient); // Replace entityId with the ID of the entity you want to delete
+                if (patientToDelete != null)
+                {
+                    db.Patients.Remove(patientToDelete);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("Patient not found");
+                }
+            }
+        }
 
+        internal static Patient EditPatient(Patient newPatient)
+        {
+            using (var db = new PatientContext())
+            {
+                Patient? patient = db.Patients.FirstOrDefault(p => p.Id == newPatient.Id);
+                if (patient != null)
+                {
+                    patient.Name = newPatient.Name;
+                    patient.Age = newPatient.Age;
+                    patient.Gender = newPatient.Gender;
+                    db.SaveChanges();
+                    return patient;
+                }
+                else
+                {
+                    throw new Exception("Patient not found");
+                }
+            }
+        }
     }
 }

@@ -4,7 +4,7 @@ using System.Windows.Input;
 namespace PatientManagement.Views
 {
     /// <summary>
-    /// Interaction logic for AddPatient.xaml
+    /// Interaction logic for EditPatient.xaml
     /// </summary>
     public partial class AddPatient : Window
     {

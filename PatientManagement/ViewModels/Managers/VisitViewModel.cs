@@ -2,7 +2,9 @@
 using PatientManagement.Models.DataEntites;
 using PatientManagement.Models.DataManager;
 using PatientManagement.Stores;
+using PatientManagement.Views;
 using System;
+using System.Diagnostics;
 using System.Windows.Input;
 
 namespace PatientManagement.ViewModels.Managers
@@ -16,6 +18,7 @@ namespace PatientManagement.ViewModels.Managers
         public DiagnosisViewModel DiagnosisViewModel { get; set; }
 
         public ICommand OpenPatientsViewCommand { get; }
+        public ICommand PrintPrescriptionCommand { get; }
 
         private PatientStore _patientStore;
 
@@ -49,8 +52,18 @@ namespace PatientManagement.ViewModels.Managers
             DiagnosisViewModel = new DiagnosisViewModel(_patientStore, false);
             _visit = VisitManager.getVisitDetails(_patientStore.CurrentVisitId);
             OpenPatientsViewCommand = new RelayCommand(OpenPatientsView);
+            PrintPrescriptionCommand = new RelayCommand(ShowPrintPreview);
             _patientStore.CanCloseCounter += ChangeCanCloseCounter;
             _savingText = string.Empty;
+        }
+
+        private void ShowPrintPreview(object obj)
+        {
+            Debug.WriteLine("adadadada");
+            PrintVisit userControl = new PrintVisit();
+            userControl.DataContext = this; // Assuming DataContext is set appropriately in your ViewModel
+            PrintPreviewWindow printPreviewWindow = new PrintPreviewWindow(userControl);
+            printPreviewWindow.ShowDialog();
         }
 
         private void ChangeCanCloseCounter(bool canClose)

@@ -2,6 +2,7 @@
 using PatientManagement.Models.DataEntites;
 using PatientManagement.Models.DataManager;
 using PatientManagement.Stores;
+using PatientManagement.Views.ConfirmationWindows;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -27,7 +28,9 @@ namespace PatientManagement.ViewModels
         //    }
         //}
         public ICommand ShowAddPatientCommand { get; set; }
-        public ICommand AddVisitCommand { get; set; }
+        public ICommand AddVisitCommand { get; }
+        public ICommand DeletePatientCommand { get; }
+        public ICommand EditPatientCommand { get; }
 
         private PatientStore _patientStore;
 
@@ -36,22 +39,48 @@ namespace PatientManagement.ViewModels
             _patientStore = patientStore;
             _patients = new ObservableCollection<Patient>(PatientManager.getPatientsFromDb() ?? Enumerable.Empty<Patient>());
             ShowAddPatientCommand = new RelayCommand(showAddPatientWindow);
+            DeletePatientCommand = new RelayCommand(DeletePatient);
+            EditPatientCommand = new RelayCommand(ShowEditpatientWindow);
             AddVisitCommand = new RelayCommand(AddVisit);
             _patientStore.PatientCreated += OnPatientCreated;
+            _patientStore.PatientEdited += OnPatientEdited;
         }
 
-        private string _lastVisit;
-
-        public string LastVisit
+        private void OnPatientEdited(Patient EditedPatient)
         {
-            get { return _lastVisit; }
-            set
+            Patient? patient = Patients.FirstOrDefault(p => p.Id == EditedPatient.Id);
+            if (patient != null)
             {
-                _lastVisit = value;
-                OnPropertyChanged(nameof(LastVisit));
+                Patients.Remove(patient);
+                Patients.Add(EditedPatient);
+
             }
         }
 
+        private void ShowEditpatientWindow(object obj)
+        {
+            if (obj is Patient patient)
+            {
+                EditPatientViewModel editPatientViewModel = new EditPatientViewModel(_patientStore, patient);
+
+            }
+        }
+
+        private void DeletePatient(object obj)
+        {
+
+            if (obj is Patient patient)
+            {
+                var confirmationWindow = new DeleteConfirmationWindow();
+                confirmationWindow.ShowDialog();
+
+                if (confirmationWindow.Confirmed)
+                {
+                    PatientManager.DeletePatient(patient);
+                    Patients.Remove(patient);
+                }
+            }
+        }
 
         private ObservableCollection<Patient> _patients;
         public ObservableCollection<Patient> Patients
@@ -70,7 +99,7 @@ namespace PatientManagement.ViewModels
             get { return _selectedPatient; }
             set
             {
-                //Debug.WriteLine("selected patient:" + _selectedPatient);
+                //Debug.WriteLine("selected EditedPatient:" + _selectedPatient);
                 if (_selectedPatient != value)
                 {
                     _selectedPatient = value;

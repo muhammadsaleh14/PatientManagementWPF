@@ -5,8 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PatientManagement.Views.Components"
              mc:Ignorable="d" 
+             
              d:DesignHeight="450" d:DesignWidth="400">
-    <Grid Background="White" HorizontalAlignment="Stretch" >
+    <Grid  d:Background="White" HorizontalAlignment="Stretch" >
         <Grid.ColumnDefinitions>
 
         </Grid.ColumnDefinitions>

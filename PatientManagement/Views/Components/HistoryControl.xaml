@@ -18,7 +18,7 @@
         </CollectionViewSource>
     </UserControl.Resources>
     <StackPanel Orientation="Vertical"
-                Background="White"
+                d:Background="White"
                 HorizontalAlignment="Stretch">
         <Label FontWeight="Bold">Patient History</Label>
         <Button Name="AddHistoryButton"

@@ -11,7 +11,7 @@
              d:DesignHeight="450"
              d:DesignWidth="800">
 
-    <Grid Background="White">
+    <Grid d:Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -40,6 +40,7 @@
             <TextBlock Grid.Column="0"
                        Grid.Row="1"
                        HorizontalAlignment="Center"
+                       
                        Text="Medicine" />
             <TextBlock Grid.Column="1"
                        Grid.Row="1"
@@ -77,31 +78,33 @@
                     Grid.Column="1"
                     Content="Submit"
                     VerticalAlignment="Top"
-                    Height="35"
+                    Height="Auto"
                     Margin="10"
-                    Padding="10" />
+                    Padding="0" />
         </Grid>
         <ListView HorizontalAlignment="Center"
                   Width="Auto"
                   Grid.Row="2"
+                  Focusable="False"
                   ItemsSource="{Binding PrescriptionsList,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}">
             <ListView.View>
                 <GridView>
                     <!-- Column for Medicine Name -->
                     <GridViewColumn Header="Medicine"
                                     DisplayMemberBinding="{Binding Medicine.MedicineName}"
-                                    Width="140" />
+                                    Width="Auto" />
 
                     <!-- Column for Dosage -->
                     <GridViewColumn Header="Dosage"
                                     DisplayMemberBinding="{Binding Dosage.Dose}"
-                                    Width="80" />
+                                    Width="Auto" />
 
                     <!-- Column for Duration -->
                     <GridViewColumn Header="Duration"
                                     DisplayMemberBinding="{Binding Duration.DurationTime}"
-                                    Width="80" />
+                                    Width="Auto" />
                     <GridViewColumn Width="Auto">
+                        <GridViewColumn.Header>Options</GridViewColumn.Header>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">

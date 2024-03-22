@@ -1,0 +1,27 @@
+﻿<Window x:Class="PatientManagement.Views.PrintPreviewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PatientManagement.Views"
+        mc:Ignorable="d"
+        Title="PrintPreviewWindow"
+        Height="500"
+        Width="400">
+    <Grid Height="700"
+          Width="400">
+
+
+        <!-- Print preview content goes here -->
+        <ContentPresenter x:Name="ContentControl"
+                          Content="{Binding Content}" />
+
+        <Button Content="Print"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Click="Button_Click"
+                Margin="0 10" />
+        <!-- Button for printing -->
+
+    </Grid>
+</Window>

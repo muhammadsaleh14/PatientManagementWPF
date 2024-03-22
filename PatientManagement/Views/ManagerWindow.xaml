@@ -8,6 +8,8 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:items="clr-namespace:PatientManagement.Views.Items"
         mc:Ignorable="d"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Title="ManagerWindow"
         Height="450"
         Width="800">
@@ -71,7 +73,7 @@
             <CheckBox HorizontalAlignment="Center"
                       Content="Show Diabled Headings"
                       x:Name="ShowDisabledHeadings" />
-            <StackPanel Background="White"
+            <StackPanel d:Background="White"
                         Width="Auto">
                 <ListBox ItemsSource="{Binding Source={StaticResource SortedItems}}"
                          Width="200">

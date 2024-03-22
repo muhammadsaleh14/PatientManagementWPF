@@ -9,12 +9,13 @@
              d:DesignHeight="450"
              d:DesignWidth="800">
     <Grid HorizontalAlignment="Stretch"
-          Background="White">
+          d:Background="White"
+          >
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
             <RowDefinition />
         </Grid.RowDefinitions>
-        <DockPanel Grid.Row="0">
+        <DockPanel Grid.Row="0" Margin="0 5">
             <StackPanel Orientation="Horizontal"
                         DockPanel.Dock="Left">
                 <Label Content="Name" />
@@ -30,9 +31,13 @@
             <Button DockPanel.Dock="Right"
                     HorizontalAlignment="Right"
                     Content="Go Back "
-                    Command="{Binding OpenPatientsViewCommand}">
+                    Command="{Binding OpenPatientsViewCommand}" Margin="10 0" />
+            <Button DockPanel.Dock="Right"
+                    HorizontalAlignment="Right"
+                    Content="Print Prescription"
+                    Command="{Binding PrintPrescriptionCommand}" />
 
-            </Button>
+
             <TextBlock Foreground="CornflowerBlue"
                        FontWeight="Bold"
                        Text="{Binding SavingText}" />

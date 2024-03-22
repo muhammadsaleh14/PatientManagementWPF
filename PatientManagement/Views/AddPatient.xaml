@@ -6,6 +6,13 @@
         xmlns:localViews="clr-namespace:PatientManagement.Views"
         xmlns:local="clr-namespace:PatientManagement.Converters"
         mc:Ignorable="d"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
         Title="AddPatient" Height="400" Width="400">
     <Window.Resources>
         <local:RadioButtonConverter  x:Key="RadioButtonConverter" />

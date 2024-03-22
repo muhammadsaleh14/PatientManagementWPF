@@ -9,7 +9,7 @@
              d:Height="450"
              d:Width="800">
     <!--d:datacontext="{d:designinstance type=viewmodels:patientlistviewmodel}"-->
-    <Grid Background="White">
+    <Grid d:Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="70" />
             <!--<RowDefinition Height="70"/>-->
@@ -47,10 +47,10 @@
                 </Grid.ColumnDefinitions>
                 <Grid DataContext="{Binding PatientListViewModel}"
                       Grid.Column="0">
-                    <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Vertical" Margin="20 0">
                         <Button Grid.Column="0"
                                 Command="{Binding ShowAddPatientCommand}"
-                                HorizontalAlignment="Right">
+                                HorizontalAlignment="Center">
                             <!--<Button.Margin></Button.Margin>-->
                             <Button.Content>Add new Patient</Button.Content>
                         </Button>

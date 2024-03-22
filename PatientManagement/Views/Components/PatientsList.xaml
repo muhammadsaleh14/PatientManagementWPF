@@ -6,9 +6,9 @@
              xmlns:local="clr-namespace:PatientManagement.Views.Components"
              xmlns:viewmodels="clr-namespace:PatientManagement.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="600">
     
-    <Grid Background="White">
+    <Grid d:Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition/>
@@ -17,7 +17,7 @@
             <TextBlock.Text>Patients List</TextBlock.Text>
         </TextBlock>
 
-        <ListView Grid.Row="1" 
+        <ListView Width="600" Grid.Row="1" 
                   ItemsSource="{Binding Patients}"
                   SelectedItem="{Binding SelectedPatient, Mode=TwoWay}"
                   SelectionChanged="ListView_SelectionChanged">
@@ -25,10 +25,10 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn  Header="Name" DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn Header="Age" DisplayMemberBinding="{Binding Age}" />
+                    <GridViewColumn   Header="Age" DisplayMemberBinding="{Binding Age}" />
                     <GridViewColumn Header="Gender" DisplayMemberBinding="{Binding Gender}" />
-                    <GridViewColumn Header="Last Visit" DisplayMemberBinding="{Binding LastVisit}" />
-                    <GridViewColumn Header="Options">
+                    <GridViewColumn >
+                        <GridViewColumn.Header>Options</GridViewColumn.Header>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" DataContext="{Binding}">
