@@ -16,7 +16,6 @@ namespace PatientManagement.Views.Components
             InitializeComponent();
 
         }
-
         private void AddHistoryButton_Click(object sender, RoutedEventArgs e)
         {
             ToggleInputVisibility();
@@ -33,8 +32,7 @@ namespace PatientManagement.Views.Components
             {
                 spInput.Visibility = Visibility.Visible;
             }
-
-
         }
+
     }
 }

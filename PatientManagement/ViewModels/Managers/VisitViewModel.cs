@@ -1,4 +1,5 @@
-﻿using PatientManagement.Commands;
+﻿using PatientManagement.AutoSaves;
+using PatientManagement.Commands;
 using PatientManagement.Models.DataEntites;
 using PatientManagement.Models.DataManager;
 using PatientManagement.Stores;
@@ -34,13 +35,27 @@ namespace PatientManagement.ViewModels.Managers
                 OnPropertyChanged(nameof(SavingText));
             }
         }
+        private string _detail;
 
+        public string Detail
+        {
+            get { return _detail; }
+            set
+            {
+                _detail = value;
+                OnPropertyChanged(nameof(Detail));
+                AutoSaveVisit.UpdateText(nameof(Detail), _detail);
+            }
+        }
+
+        private readonly AutoSaveVisit AutoSaveVisit;
 
         public Visit Visit
         {
             get { return _visit; }
             set { _visit = value; }
         }
+
 
         public Action CloseWindow { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
@@ -51,11 +66,25 @@ namespace PatientManagement.ViewModels.Managers
             HistoriesViewModel = new HistoryTableViewModel(_patientStore);
             DiagnosisViewModel = new DiagnosisViewModel(_patientStore, false);
             _visit = VisitManager.getVisitDetails(_patientStore.CurrentVisitId);
+            _detail = _visit.OptionalDetail ?? "";
             OpenPatientsViewCommand = new RelayCommand(OpenPatientsView);
             PrintPrescriptionCommand = new RelayCommand(ShowPrintPreview);
             _patientStore.CanCloseCounter += ChangeCanCloseCounter;
             _savingText = string.Empty;
+
+            AutoSaveVisit = new AutoSaveVisit(_patientStore, saveAction);
+
         }
+
+        private void saveAction(string property, string? value)
+        {
+            if (property == nameof(Detail))
+            {
+                Detail = VisitManager.SaveDetail(_visit, value) ?? "";
+            }
+        }
+
+
 
         private void ShowPrintPreview(object obj)
         {

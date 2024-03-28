@@ -50,7 +50,8 @@
                                      HorizontalAlignment="Stretch"
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
-                                     MinHeight="40" />
+                                     MinHeight="40"
+                                     />
                         </StackPanel>
                     </Border>
                 </DataTemplate>

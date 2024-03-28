@@ -12,22 +12,24 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="EditPatientWindow" Height="450" Width="800">
+        Title="EditPatientWindow"
+        Height="400"
+        Width="400">
     <Window.Resources>
         <local:RadioButtonConverter x:Key="RadioButtonConverter" />
     </Window.Resources>
     <Grid RenderTransformOrigin="0.398,0.74">
         <Grid.RowDefinitions>
-            <RowDefinition Height="70" />
+            <RowDefinition Height="60" />
             <RowDefinition Height="220" />
             <RowDefinition Height="40" />
-            <RowDefinition Height="80" />
+            <RowDefinition Height="Auto" />
 
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0"
                    FontWeight="Bold"
                    FontSize="20">
-            <TextBlock.Text>Add Patient</TextBlock.Text>
+            <TextBlock.Text>Edit Patient</TextBlock.Text>
         </TextBlock>
         <Grid Grid.Row="1">
             <Grid.Height>200</Grid.Height>
@@ -43,12 +45,15 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Row="0"
+                       VerticalAlignment="Center"
                        Grid.Column="0"
                        Text="Name" />
             <TextBlock Grid.Row="1"
+                       VerticalAlignment="Center"
                        Grid.Column="0"
                        Text="Age" />
             <TextBlock Grid.Row="2"
+                       VerticalAlignment="Center"
                        Grid.Column="0"
                        Text="Gender" />
 
@@ -56,6 +61,7 @@
                      Grid.Row="0"
                      Grid.Column="1"
                      Name="name"
+                     VerticalAlignment="Center"
                      MinWidth="100">
 
             </TextBox>
@@ -63,6 +69,8 @@
                      PreviewTextInput="age_PreviewTextInput"
                      Text="{Binding Age, UpdateSourceTrigger=PropertyChanged}"
                      Grid.Row="1"
+                     VerticalAlignment="Center"
+                     
                      Grid.Column="1"
                      MinWidth="100" />
             <Grid Grid.Row="2"
@@ -99,10 +107,9 @@
                    Text="{Binding ErrorMessage,UpdateSourceTrigger=PropertyChanged}"
                    Foreground="Red" />
         <Button x:Name="submit"
-                Command="{Binding AddPatientCommand}"
+                Command="{Binding EditPatientCommand}"
                 Grid.Row="3"
                 Content="Submit"
-                VerticalAlignment="Top"
-                Padding="10" />
+                VerticalAlignment="Center" />
     </Grid>
 </Window>

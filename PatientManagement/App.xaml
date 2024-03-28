@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:PatientManagement"
              xmlns:Converters="clr-namespace:PatientManagement.Converters"
              xmlns:materialDesign="https://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:controls="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.Input.Toolkit"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
@@ -36,6 +37,23 @@
 
             </Style>
 
+            <Style x:Key="MaterialDesignAutoCompleteBoxStyle"
+                   TargetType="controls:AutoCompleteBox">
+                <Setter Property="FontSize"
+                        Value="17" />
+                <Setter Property="HorizontalAlignment"
+                        Value="Center" />
+
+                <Setter Property="BorderBrush"
+                        Value="{DynamicResource MaterialDesignTextAreaBorder}" />
+                <Setter Property="BorderThickness"
+                        Value="1" />
+                <Setter Property="Padding"
+                        Value="8,5" />
+                <Setter Property="Foreground"
+                        Value="{DynamicResource MaterialDesignLightForeground}" />
+                <!-- Add more Material Design styles as needed -->
+            </Style>
 
             <Style TargetType="{x:Type TextBox}"
                    BasedOn="{StaticResource MaterialDesignTextBox}">

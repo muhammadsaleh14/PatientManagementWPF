@@ -10,9 +10,13 @@ namespace PatientManagement.Views.ConfirmationWindows
     {
         public bool Confirmed { get; private set; }
 
-        public DeleteConfirmationWindow()
+        public DeleteConfirmationWindow(string content)
         {
             InitializeComponent();
+            ContentToBeDeleted.Text = content;
+            this.SizeToContent = SizeToContent.Height;
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
         }
 
         private void Yes_Click(object sender, RoutedEventArgs e)

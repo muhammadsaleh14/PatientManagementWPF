@@ -40,7 +40,9 @@ public class AutoSaveTimer : ViewModelBase
 
     }
 
-    public void UpdateText(string propertyName, string text) // Updated method signature
+
+
+    public virtual void UpdateText(string propertyName, string text) // Updated method signature
     {
         RestartTimer();
         IsSaving = true;

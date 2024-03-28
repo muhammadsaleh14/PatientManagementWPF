@@ -2,6 +2,7 @@
 using PatientManagement.Models.DataEntites;
 using PatientManagement.Models.DataManager;
 using PatientManagement.Stores;
+using PatientManagement.Views;
 using PatientManagement.Views.ConfirmationWindows;
 using System;
 using System.Collections.ObjectModel;
@@ -62,6 +63,11 @@ namespace PatientManagement.ViewModels
             if (obj is Patient patient)
             {
                 EditPatientViewModel editPatientViewModel = new EditPatientViewModel(_patientStore, patient);
+                EditPatientWindow editPatientWindow = new EditPatientWindow
+                {
+                    DataContext = editPatientViewModel
+                };
+                editPatientWindow.ShowDialog();
 
             }
         }
@@ -71,7 +77,7 @@ namespace PatientManagement.ViewModels
 
             if (obj is Patient patient)
             {
-                var confirmationWindow = new DeleteConfirmationWindow();
+                var confirmationWindow = new DeleteConfirmationWindow("Deleting Patient:" + patient.Name);
                 confirmationWindow.ShowDialog();
 
                 if (confirmationWindow.Confirmed)
@@ -132,7 +138,7 @@ namespace PatientManagement.ViewModels
             {
                 if (obj is Patient patient)
                 {
-                    Visit? newVisit = VisitManager.AddVisitToPatient(patient.Id, "implement this");
+                    Visit? newVisit = VisitManager.AddVisitToPatient(patient.Id);
                     if (newVisit != null)
                     {
                         //this is a bit of a shortcut as it will refetch all the visits from the database

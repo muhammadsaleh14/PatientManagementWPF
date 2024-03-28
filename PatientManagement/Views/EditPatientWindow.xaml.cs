@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace PatientManagement.Views
 {
@@ -22,6 +11,14 @@ namespace PatientManagement.Views
         public EditPatientWindow()
         {
             InitializeComponent();
+        }
+        private void age_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+
+            if (!char.IsDigit(e.Text, e.Text.Length - 1) && !char.IsControl(e.Text, e.Text.Length - 1))
+            {
+                e.Handled = true;
+            }
         }
     }
 }

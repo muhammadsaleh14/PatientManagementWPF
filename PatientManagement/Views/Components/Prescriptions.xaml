@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:PatientManagement.Views.Components"
              xmlns:controls="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.Input.Toolkit"
              xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:custom="clr-namespace:PatientManagement.CustomComponents"
              xmlns:viewmodels="clr-namespace:PatientManagement.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="450"
@@ -40,7 +41,6 @@
             <TextBlock Grid.Column="0"
                        Grid.Row="1"
                        HorizontalAlignment="Center"
-                       
                        Text="Medicine" />
             <TextBlock Grid.Column="1"
                        Grid.Row="1"
@@ -51,13 +51,25 @@
                        HorizontalAlignment="Center"
                        Text="Duration" />
 
-            <controls:AutoCompleteBox HorizontalAlignment="Stretch"
-                                      Grid.Column="0"
-                                      Grid.Row="2"
-                                      Placeholder="Enter Medicine Name"
-                                      FilterMode="Contains"
-                                      ItemsSource="{Binding AllMedicines}"
-                                      Text="{Binding AddMedicineText,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
+            <custom:AutocompleteTextBox  Grid.Column="0"
+                                         HorizontalAlignment="Stretch"
+                                         Grid.Row="2"
+                                         Text="{Binding AddMedicineText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                         AutocompleteSuggestions="{Binding AllMedicines}" />
+            <!--<ComboBox HorizontalAlignment="Stretch"
+                      Grid.Column="0"
+                      Grid.Row="2"
+                      IsEditable="True"
+                      StaysOpenOnEdit="True"
+                      ItemsSource="{Binding AllMedicines}"
+                      Text="{Binding AddMedicineText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                <ComboBox.Style>
+                    <Style TargetType="ComboBox"
+                           BasedOn="{StaticResource MaterialDesignComboBox}">
+                        
+                    </Style>
+                </ComboBox.Style>
+            </ComboBox>-->
             <controls:AutoCompleteBox HorizontalAlignment="Stretch"
                                       Grid.Column="1"
                                       Grid.Row="2"
@@ -112,14 +124,15 @@
                                             RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                             CommandParameter="{Binding}"
                                             Margin="2,7">
-                                        <fa:FontAwesome FontSize="16" Icon="Edit" />
+                                        <fa:FontAwesome FontSize="16"
+                                                        Icon="Edit" />
                                     </Button>
                                     <Button  Content="❌"
                                              Command="{Binding Path=DataContext.DeletePrescriptionCommand, 
                                         RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                              CommandParameter="{Binding}"
                                              Margin="2,7" />
-                                    
+
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>

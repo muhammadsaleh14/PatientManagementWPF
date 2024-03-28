@@ -19,7 +19,7 @@ namespace PatientManagement.Models.DataManager
                     .ToList();
             }
         }
-        public static Visit? AddVisitToPatient(string? patientId, string? optionalDetail)
+        public static Visit? AddVisitToPatient(string? patientId)
         {
             using (var db = new PatientContext()) // Use PatientContext instead of VisitContext
             {
@@ -32,7 +32,7 @@ namespace PatientManagement.Models.DataManager
                         Debug.WriteLine("patient ID" + patientId);
 
                         // Create a new instance of the VisitPage class
-                        Visit newVisit = new(id: null, patientId: patientId, optionalDetail: optionalDetail, date: DateTime.Now);
+                        Visit newVisit = new(id: null, patientId: patientId, optionalDetail: null, date: DateTime.Now);
 
                         // Add the new visit to the visits's list of visits
                         visits.Add(newVisit);
@@ -95,6 +95,42 @@ namespace PatientManagement.Models.DataManager
                 }
             }
 
+        }
+
+        internal static string? SaveDetail(Visit visit, string? value)
+        {
+            using (var db = new PatientContext())
+            {
+                Visit? dbVisit = db.Visits.Find(visit.Id);
+                if (dbVisit != null)
+                {
+                    dbVisit.OptionalDetail = value;
+                    db.SaveChanges();
+                    return dbVisit.OptionalDetail;
+                }
+                else
+                {
+                    throw new Exception("Visit not found");
+                }
+            }
+        }
+
+        internal static void DeleteVisit(Visit visit)
+        {
+            using (var db = new PatientContext())
+            {
+
+                Visit? dbVisit = db.Visits.Find(visit.Id);
+                if (dbVisit != null)
+                {
+                    db.Visits.Remove(dbVisit);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("Visit not found");
+                }
+            }
         }
     }
 }

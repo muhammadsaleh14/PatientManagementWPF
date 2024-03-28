@@ -1,0 +1,188 @@
+﻿<UserControl x:Class="PatientManagement.Views.Managers.DiagnosisManager"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:PatientManagement.Views.Managers"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="SortedItems">
+            <CollectionViewSource.Source>
+                <!-- Specify the source explicitly -->
+                <Binding Path="DiagnosisViewModel.AllDiagnosisHeadings" />
+            </CollectionViewSource.Source>
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="DiagnosisHeading.Priority"
+                                     Direction="Ascending" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+    </UserControl.Resources>
+    <Grid d:Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Button Grid.Row="0"
+                Content="Add new diagnosis"
+                Click="AddNewDiagnosis_Click" />
+        <StackPanel Grid.Row="1"
+                    Margin="0 10"
+                    x:Name="AddNewDiagnosisForm">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Label Content="Enter Heading"
+                       HorizontalAlignment="Center" />
+                <TextBox MinWidth="80"
+                         Text="{Binding DiagnosisViewModel.AddDiagnosisHeadingText,UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <Button Content="Submit"
+                    Command="{Binding DiagnosisViewModel.AddDiagnosisHeadingCommand}"
+                    Width="100"
+                    Margin="0 10 0 0" />
+
+        </StackPanel>
+
+        <TextBlock Foreground="Red"
+                   Grid.Row="2"
+                   Text="{Binding DiagnosisViewModel.ErrorMessage}"
+                   Height="Auto" />
+        <TextBlock Text="Edit Diagnosis Table"
+                   Grid.Row="3"
+                   HorizontalAlignment="Center" />
+        <CheckBox HorizontalAlignment="Center"
+                  Grid.Row="4"
+                  Content="Show Diabled Headings"
+                  x:Name="ShowDisabledHeadings" />
+
+        <ListBox Grid.Row="5"
+                 VirtualizingPanel.ScrollUnit="Pixel"
+                 ItemsSource="{Binding Source={StaticResource SortedItems}}">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="HorizontalContentAlignment"
+                            Value="Stretch" />
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DataTemplate.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <!-- Condition 1: CheckBox is checked -->
+                                <Condition Binding="{Binding IsChecked, ElementName=ShowDisabledHeadings}"
+                                           Value="False" />
+                                <!-- Condition 2: IsActive property of the item is false -->
+                                <Condition Binding="{Binding DiagnosisHeading.IsActive}"
+                                           Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <!-- Set Visibility to Collapsed when both conditions are met -->
+                            <Setter Property="Visibility"
+                                    Value="Collapsed" />
+                        </MultiDataTrigger>
+                    </DataTemplate.Triggers>
+                    <Grid>
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <!-- Use a MultiDataTrigger -->
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <!-- Condition 1: CheckBox is checked -->
+                                            <Condition Binding="{Binding IsChecked, ElementName=ShowDisabledHeadings}"
+                                                       Value="False" />
+                                            <!-- Condition 2: IsActive property of the item is false -->
+                                            <Condition Binding="{Binding DiagnosisHeading.IsActive}"
+                                                       Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <!-- Set Visibility to Collapsed when both conditions are met -->
+                                        <Setter Property="Visibility"
+                                                Value="Collapsed" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition  Width="*" />
+                            <ColumnDefinition  Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+
+                        </Grid.ColumnDefinitions>
+
+
+                        <TextBlock Margin="5"
+                                   Grid.Column="0"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Center"
+                                   Text="{Binding DiagnosisHeading.Heading}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding DiagnosisHeading.IsActive}"
+                                                     Value="True">
+                                            <Setter Property="Foreground"
+                                                    Value="Black" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding DiagnosisHeading.IsActive}"
+                                                     Value="False">
+                                            <Setter Property="Foreground"
+                                                    Value="DarkGray" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+
+                        </TextBlock>
+
+                        <Button Grid.Column="1"
+                                Height="Auto"
+                                Margin="5"
+                                Command="{Binding IncreasePriorityCommand}">
+                            <fa:FontAwesome FontSize="16"
+                                            Icon="ArrowUp" />
+                        </Button>
+                        <TextBlock Grid.Column="2"
+                                   Margin="5"
+                                   HorizontalAlignment="Stretch"
+                                   Text="{Binding DiagnosisHeading.Priority}" />
+                        <Button Width="64"
+                                Grid.Column="3"
+                                Command="{Binding ToggleEnabledHeadingCommand}">
+                            <Button.Style>
+                                <Style TargetType="Button"
+                                       BasedOn="{StaticResource MaterialDesignToolButton}">
+                                    <Style.Triggers>
+                                        <!-- DataTrigger to control visibility based on IsButton1Visible property -->
+                                        <DataTrigger Binding="{Binding DiagnosisHeading.IsActive}"
+                                                     Value="False">
+                                            <Setter Property="Content"
+                                                    Value="Enable" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding DiagnosisHeading.IsActive}"
+                                                     Value="True">
+                                            <Setter Property="Content"
+                                                    Value="Disable" />
+                                        </DataTrigger>
+
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+
+        </ListBox>
+    </Grid>
+</UserControl>

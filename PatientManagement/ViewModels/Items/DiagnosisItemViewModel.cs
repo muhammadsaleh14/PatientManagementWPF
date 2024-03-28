@@ -1,9 +1,9 @@
-﻿using PatientManagement.Models.DataEntites;
+﻿using PatientManagement.AutoSaves;
+using PatientManagement.Models.DataEntites;
 using PatientManagement.Models.DataManager;
 using PatientManagement.Stores;
 using PatientManagement.ViewModels.Managers;
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 
 namespace PatientManagement.ViewModels.Items
@@ -47,33 +47,23 @@ namespace PatientManagement.ViewModels.Items
             {
                 _detail = value;
                 OnPropertyChanged(nameof(Detail));
-                AutoSaveTimer.UpdateText(nameof(Detail), _detail);
+                AutoSaveVisit.UpdateText(nameof(Detail), _detail);
             }
         }
 
 
-        public AutoSaveTimer AutoSaveTimer { get; set; }
+        public AutoSaveVisit AutoSaveVisit { get; set; }
 
         public DiagnosisItemViewModel(PatientStore patientStore, Diagnosis diagnosis)
         {
             _patientStore = patientStore;
-            AutoSaveTimer = new AutoSaveTimer(saveDiagnosisDetailAction);
+            AutoSaveVisit = new AutoSaveVisit(_patientStore, saveDiagnosisDetailAction);
             _diagnosis = diagnosis;
             _heading = diagnosis.DiagnosisHeading.Heading;
             _detail = diagnosis.Detail;
-            AutoSaveTimer.PropertyChanged += AutoSaveTimerChanged;
-
-
         }
 
-        private void AutoSaveTimerChanged(object? sender, PropertyChangedEventArgs e)
-        {
 
-            if (sender is AutoSaveTimer autoSaveTimer && e.PropertyName == nameof(autoSaveTimer.IsSaving))
-            {
-                _patientStore.ChangeCanCloseCounter(!autoSaveTimer.IsSaving);
-            }
-        }
 
         private void saveDiagnosisDetailAction(string propertyName, string? textValue)
         {

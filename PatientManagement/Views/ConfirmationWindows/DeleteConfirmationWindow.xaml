@@ -6,29 +6,38 @@
         xmlns:local="clr-namespace:PatientManagement.Views.ConfirmationWindows"
         mc:Ignorable="d"
         Title="Confirm Delete"
-        Height="200"
+        Height="Auto"
         Width="400">
-    <Grid>
-        <StackPanel HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
-            <TextBlock Grid.Row="0"
-                       Text="Are you sure you want to delete?"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center" />
-            <StackPanel VerticalAlignment="Center"
-                        Grid.Row="1"
-                        Orientation="Horizontal"
-                        HorizontalAlignment="Center"
-                        Margin="0,20,0,0">
-                <Button Content="Yes"
-                        Width="80"
-                        Margin="10"
-                        Click="Yes_Click" />
-                <Button Content="No"
-                        Width="80"
-                        Margin="10"
-                        Click="No_Click" />
-            </StackPanel>
+    <Grid Height="Auto">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0"
+                   Margin="0 5"
+                   x:Name="ContentToBeDeleted"
+                   TextWrapping="Wrap"
+                   FontWeight="DemiBold" />
+        <TextBlock Grid.Row="1"
+                   Margin="0 10"
+                   Text="Confirm Delete?"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center" />
+        <StackPanel VerticalAlignment="Center"
+                    Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Margin="0 10">
+            <Button Content="Yes"
+                    Width="80"
+                    Margin="10"
+                    Click="Yes_Click" />
+            <Button Content="No"
+                    Width="80"
+                    Margin="10"
+                    Click="No_Click" />
         </StackPanel>
+
     </Grid>
 </Window>

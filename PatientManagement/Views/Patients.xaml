@@ -29,7 +29,7 @@
                 Patients Managemnent
             </TextBlock>
 
-            <Button Width="80"
+            <Button Width="95"
                     Height="40"
                     Grid.Column="2"
                     Content="Manage"
@@ -42,7 +42,7 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition />
+                    <ColumnDefinition  Width="Auto"/>
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Grid DataContext="{Binding PatientListViewModel}"

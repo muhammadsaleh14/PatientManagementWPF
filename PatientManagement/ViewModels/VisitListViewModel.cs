@@ -3,6 +3,7 @@ using PatientManagement.Models.DataEntites;
 using PatientManagement.Models.DataManager;
 using PatientManagement.Stores;
 using PatientManagement.ViewModels.Managers;
+using PatientManagement.Views.ConfirmationWindows;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -15,8 +16,8 @@ namespace PatientManagement.ViewModels
     public class VisitListViewModel : INotifyPropertyChanged
     {
         private PatientStore _patientStore;
-        public ICommand OpenVisitViewCommand;
-
+        public ICommand OpenVisitViewCommand { get; }
+        public ICommand DeleteVisitCommand { get; }
 
         public VisitListViewModel(Stores.PatientStore patientStore)
         {
@@ -25,6 +26,25 @@ namespace PatientManagement.ViewModels
             //_patientStore.VisitCreated += OnVisitCreated;
             _patientVisits = new ObservableCollection<Visit>(VisitManager.GetPatientVisitsFromDb(SelectedPatient?.Id) ?? Enumerable.Empty<Visit>());
             OpenVisitViewCommand = new RelayCommand(OpenVisitView);
+            DeleteVisitCommand = new RelayCommand(DeleteVisit);
+        }
+
+        private void DeleteVisit(object obj)
+        {
+            if (obj is Visit visit)
+            {
+                var confirmationWindow = new DeleteConfirmationWindow("Deleting Visit " +
+                    "\nDate: " + visit.Date + "" +
+                    "\nDetail:" + visit.OptionalDetail);
+                confirmationWindow.ShowDialog();
+                confirmationWindow.Activate();
+
+                if (confirmationWindow.Confirmed)
+                {
+                    VisitManager.DeleteVisit(visit);
+                    PatientVisits.Remove(visit);
+                }
+            }
         }
 
         private void OpenVisitView(object visitId)

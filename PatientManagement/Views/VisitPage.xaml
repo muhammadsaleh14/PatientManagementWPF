@@ -8,30 +8,45 @@
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
+    <UserControl.Resources>
+
+    </UserControl.Resources>
     <Grid HorizontalAlignment="Stretch"
-          d:Background="White"
-          >
+          d:Background="White">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition  Height="Auto"/>
             <RowDefinition />
         </Grid.RowDefinitions>
-        <DockPanel Grid.Row="0" Margin="0 5">
+        <DockPanel Grid.Row="0"
+                   Margin="0 5">
             <StackPanel Orientation="Horizontal"
                         DockPanel.Dock="Left">
                 <Label Content="Name" />
-                <TextBlock Text="{Binding Visit.Patient.Name}" />
-
+                <Border CornerRadius="3" BorderThickness="1" BorderBrush="{DynamicResource MaterialDesignTextBoxBorder}">
+                    <TextBlock Margin="2 0" VerticalAlignment="Center"
+                               Text="{Binding Visit.Patient.Name}" />
+                </Border>
                 <Label Content="Age" />
-                <TextBlock Text="{Binding Visit.Patient.Age}" />
+                <Border CornerRadius="3" BorderThickness="1"  BorderBrush="{DynamicResource MaterialDesignTextBoxBorder}">
+                    <TextBlock Margin="2 0" VerticalAlignment="Center"
+                               Text="{Binding Visit.Patient.Age}" />
+                </Border>
 
                 <Label Content="Gender" />
-                <TextBlock Text="{Binding Visit.Patient.Gender}" />
+                <Border  CornerRadius="3" BorderThickness="1" BorderBrush="{DynamicResource MaterialDesignTextBoxBorder}">
+                    <TextBlock Margin="2 0" VerticalAlignment="Center"
+                               Text="{Binding Visit.Patient.Gender}" />
+                </Border>
+                
+
             </StackPanel>
 
             <Button DockPanel.Dock="Right"
                     HorizontalAlignment="Right"
                     Content="Go Back "
-                    Command="{Binding OpenPatientsViewCommand}" Margin="10 0" />
+                    Command="{Binding OpenPatientsViewCommand}"
+                    Margin="10 0" />
             <Button DockPanel.Dock="Right"
                     HorizontalAlignment="Right"
                     Content="Print Prescription"
@@ -43,7 +58,14 @@
                        Text="{Binding SavingText}" />
 
         </DockPanel>
-        <Grid Grid.Row="1">
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Label Margin="10 0 0 0"
+                   Content="Detail:" />
+            <TextBox  Text="{Binding Detail,UpdateSourceTrigger=PropertyChanged}"
+                      MinWidth="70" />
+        </StackPanel>
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="2*" />

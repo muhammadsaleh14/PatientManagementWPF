@@ -40,7 +40,7 @@ namespace PatientManagement.Models.DataManager
         {
             using (var db = new PatientContext())
             {
-                Patient? patientToDelete = db.Patients.Find(patient); // Replace entityId with the ID of the entity you want to delete
+                Patient? patientToDelete = db.Patients.Find(patient.Id); // Replace entityId with the ID of the entity you want to delete
                 if (patientToDelete != null)
                 {
                     db.Patients.Remove(patientToDelete);
