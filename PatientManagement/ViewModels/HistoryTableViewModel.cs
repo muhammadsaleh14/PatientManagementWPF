@@ -5,6 +5,7 @@ using PatientManagement.Stores;
 using PatientManagement.ViewModels.Items;
 using PatientManagement.ViewModels.Managers;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Input;
@@ -15,6 +16,10 @@ namespace PatientManagement.ViewModels
     {
         private string _visitid;
         private PatientStore _patientStore;
+
+        public List<string> AllHistoryDetails { get; }
+        public List<string> AllHistoryHeadings { get; }
+
         public ICommand AddHistoryCommand { get; }
         public ICommand RemoveHistoryCommand { get; }
 
@@ -51,22 +56,30 @@ namespace PatientManagement.ViewModels
             _patientStore = patientStore;
             _visitid = patientStore.CurrentVisitId ?? throw new Exception("Visit Id is null");
 
+            AllHistoryHeadings = HistoryManager.getAllHistoryHeadings() ?? new List<string>();
+            AllHistoryDetails = HistoryManager.getAllHistoryDetails() ?? new List<string>();
+
+
             _historyTable = HistoryManager.getHistoryTableForVisit(_visitid);
+            _patientStore.AllHistoryDetails = AllHistoryDetails;
+            _patientStore.AllHistoryHeadings = AllHistoryHeadings;
+
             _historyItems = ModelToViewModelProjection(_historyTable);
 
-            _patientStore.HistoryTableChanged += ChangeHistoryTable;
+            //_patientStore.HistoryTableChanged += ChangeHistoryTable;
             AddHistoryCommand = new RelayCommand(AddHistory);
             RemoveHistoryCommand = new RelayCommand(RemoveHistory);
 
         }
 
-        private void ChangeHistoryTable(HistoryTable obj)
-        {
-            if (obj is HistoryTable historyTable)
-            {
-                HistoryTable = historyTable;
-            }
-        }
+
+        //private void ChangeHistoryTable(HistoryTable obj)
+        //{
+        //    if (obj is HistoryTable historyTable)
+        //    {
+        //        HistoryTable = historyTable;
+        //    }
+        //}
 
         private ObservableCollection<HistoryItemViewModel> ModelToViewModelProjection(HistoryTable historyTable)
         {
@@ -83,18 +96,13 @@ namespace PatientManagement.ViewModels
         private void RemoveHistory(object obj)
         {
 
-            try
+
+            if (obj is HistoryItemViewModel historyItemViewModel && historyItemViewModel.HistoryItem != null)
             {
-                if (obj is HistoryItemViewModel historyItemViewModel)
-                {
-                    HistoryManager.RemoveHistoryItemFromVisit(_visitid, historyItemViewModel.HistoryItem.Id);
-                    HistoryItems.Remove(historyItemViewModel);
-                }
+                HistoryManager.RemoveHistoryItemFromVisit(_visitid, historyItemViewModel.HistoryItem);
+                HistoryItems.Remove(historyItemViewModel);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
         }
 
         private void AddHistory(object obj)

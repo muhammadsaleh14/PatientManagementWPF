@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PatientManagement.Models.Contexts;
 
@@ -10,9 +11,10 @@ using PatientManagement.Models.Contexts;
 namespace PatientManagement.Migrations
 {
     [DbContext(typeof(PatientContext))]
-    partial class PatientContextModelSnapshot : ModelSnapshot
+    [Migration("20240328223434_AddedCaseInsensitiveToMedicine_Dosage_Duration")]
+    partial class AddedCaseInsensitiveToMedicine_Dosage_Duration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.26");
@@ -36,8 +38,6 @@ namespace PatientManagement.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Detail");
 
                     b.HasIndex("DiagnosisHeadingId");
 

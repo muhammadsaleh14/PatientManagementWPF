@@ -4,6 +4,7 @@ using PatientManagement.Models.DataManager;
 using PatientManagement.Stores;
 using PatientManagement.ViewModels.Managers;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace PatientManagement.ViewModels.Items
@@ -11,6 +12,8 @@ namespace PatientManagement.ViewModels.Items
     public class DiagnosisItemViewModel : ViewModelBase
     {
         private PatientStore _patientStore;
+
+        public List<string> AllDiagnosisDetails { get; }
 
         private Diagnosis _diagnosis;
 
@@ -57,6 +60,7 @@ namespace PatientManagement.ViewModels.Items
         public DiagnosisItemViewModel(PatientStore patientStore, Diagnosis diagnosis)
         {
             _patientStore = patientStore;
+            AllDiagnosisDetails = _patientStore.AllDiagnosisDetails ?? new List<string>();
             AutoSaveVisit = new AutoSaveVisit(_patientStore, saveDiagnosisDetailAction);
             _diagnosis = diagnosis;
             _heading = diagnosis.DiagnosisHeading.Heading;

@@ -2,6 +2,7 @@
 using PatientManagement.Models.DataEntites;
 using PatientManagement.Models.DataManager.HelperFuntions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PatientManagement.Models.DataManager
@@ -152,7 +153,7 @@ namespace PatientManagement.Models.DataManager
             }
         }
 
-        internal static HistoryTable RemoveHistoryItemFromVisit(string visitId, string historyItemId)
+        internal static void RemoveHistoryItemFromVisit(string visitId, HistoryItem historyItemParam)
         {
             using (var db = new PatientContext())
             {
@@ -163,19 +164,32 @@ namespace PatientManagement.Models.DataManager
 
                 visit.HistoryTable = historyTable;
 
-                HistoryItem? historyItem = visit.HistoryTable.HistoryItems.FirstOrDefault(i => i.Id == historyItemId);
+                HistoryItem? historyItem = visit.HistoryTable.HistoryItems.FirstOrDefault(i => i.Id == historyItemParam.Id);
 
                 if (historyItem == null)
                 {
-                    throw new Exception("No such history record exists with Id:" + historyItemId);
+                    throw new Exception("No such history record exists with Id:" + historyItem);
                 }
 
                 visit.HistoryTable.HistoryItems.Remove(historyItem);
-
                 db.SaveChanges();
 
-                return visit.HistoryTable;
+            }
+        }
 
+        internal static List<string>? getAllHistoryDetails()
+        {
+            using (var db = new PatientContext())
+            {
+                return db.HistoryItems.Select(history => history.Detail).Distinct().ToList();
+            }
+        }
+
+        internal static List<string>? getAllHistoryHeadings()
+        {
+            using (var db = new PatientContext())
+            {
+                return db.HistoryHeadings.Select(historyHeading => historyHeading.Heading).Distinct().ToList();
             }
         }
     }

@@ -50,14 +50,18 @@ namespace PatientManagement.Models.Contexts
             //Medicine Table
             modelBuilder.Entity<Medicine>().Property(m => m.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Medicine>().HasIndex(m => m.MedicineName).IsUnique();
+            modelBuilder.Entity<Medicine>().Property(m => m.MedicineName).HasColumnType("TEXT COLLATE NOCASE");
 
             //Dosage Table
             modelBuilder.Entity<Dosage>().Property(d => d.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Dosage>().HasIndex(d => d.Dose).IsUnique();
+            modelBuilder.Entity<Dosage>().Property(d => d.Dose).HasColumnType("TEXT COLLATE NOCASE");
+
 
             //Duration Table
             modelBuilder.Entity<Duration>().Property(d => d.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Duration>().HasIndex(d => d.DurationTime).IsUnique();
+            modelBuilder.Entity<Duration>().Property(d => d.DurationTime).HasColumnType("TEXT COLLATE NOCASE");
 
 
             //Historytable table
@@ -77,6 +81,8 @@ namespace PatientManagement.Models.Contexts
             //Diagnosis table
             modelBuilder.Entity<Diagnosis>().Property(d => d.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Diagnosis>().HasIndex(d => d.VisitId);
+            modelBuilder.Entity<Diagnosis>().HasIndex(d => d.Detail);
+
 
 
             //DiagnosisHeading table

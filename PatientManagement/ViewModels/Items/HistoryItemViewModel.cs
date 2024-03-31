@@ -4,6 +4,7 @@ using PatientManagement.Models.DataManager;
 using PatientManagement.Stores;
 using PatientManagement.ViewModels.Managers;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace PatientManagement.ViewModels.Items
@@ -11,6 +12,10 @@ namespace PatientManagement.ViewModels.Items
     public class HistoryItemViewModel : ViewModelBase
     {
         private PatientStore _patientStore;
+
+        public List<string> AllHistoryDetails { get; }
+        public List<string> AllHistoryHeadings { get; }
+
 
         private string _visitId;
 
@@ -63,6 +68,8 @@ namespace PatientManagement.ViewModels.Items
         public HistoryItemViewModel(PatientStore patientStore, HistoryItem historyItem)
         {
             _patientStore = patientStore;
+            AllHistoryHeadings = _patientStore.AllHistoryHeadings ?? new List<string>();
+            AllHistoryDetails = _patientStore.AllHistoryDetails ?? new List<string>();
             _visitId = patientStore.CurrentVisitId ?? throw new Exception("VisitId is null in history item");
             _historyItem = historyItem;
             _historyHeading = historyItem.HistoryHeading.Heading;
@@ -82,7 +89,7 @@ namespace PatientManagement.ViewModels.Items
             if (propertyName == nameof(HistoryDetail))
             {
                 HistoryTable historyTable = HistoryManager.EditHistoryDetailForVisit(_visitId, _historyItem.Id, textValue);
-                _patientStore.ChangeHistoryTable(historyTable);
+                //_patientStore.ChangeHistoryTable(historyTable);
             }
         }
     }

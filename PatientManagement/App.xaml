@@ -28,6 +28,7 @@
             <SolidColorBrush x:Key="SecondaryHueLightBrush"
                              Color="#F0F4C3" />
 
+            
             <Style TargetType="{x:Type TextBlock}"
                    BasedOn="{StaticResource MaterialDesignTextBlock}">
                 <Setter Property="FontSize"

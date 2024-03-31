@@ -171,6 +171,14 @@ namespace PatientManagement.Models.DataManager
 
         }
 
+        internal static List<string>? getAllDiagnosisDetails()
+        {
+            using (var db = new PatientContext())
+            {
+                return db.Diagnoses.Select(diagnosis => diagnosis.Detail).Distinct().ToList();
+            }
+        }
+
 
 
         //internal static void sortPriorities()

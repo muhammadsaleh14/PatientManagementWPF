@@ -5,15 +5,14 @@ using System;
 
 namespace PatientManagement.Stores
 {
-    public class PatientStore
+    public partial class PatientStore
     {
-        public string? CurrentVisitId;
         public event Action<ViewModelBase>? ViewModelChanged;
         public event Action<Patient>? PatientCreated;
         public event Action<Visit>? VisitCreated;
         public event Action<PatientStore>? AddPatientWindowOpened;
         public event Action<Patient?>? PatientSelectionChanged;
-        public event Action<HistoryTable>? HistoryTableChanged;
+        //public event Action<HistoryTable>? HistoryTableChanged;
         public event Action<DiagnosisHeadingViewModel>? DiagnosisHeadingDisabled;
         public event Action? DiagnosisHeadingPriorityChanged;
         public event Action<Patient>? PatientEdited;
@@ -39,10 +38,10 @@ namespace PatientManagement.Stores
         {
             DiagnosisHeadingDisabled?.Invoke(diagnosisHeadingViewModel);
         }
-        public void ChangeHistoryTable(HistoryTable historyTable)
-        {
-            HistoryTableChanged?.Invoke(historyTable);
-        }
+        //public void ChangeHistoryTable(HistoryTable historyTable)
+        //{
+        //    HistoryTableChanged?.Invoke(historyTable);
+        //}
         public void ChangeViewModel(ViewModelBase currentViewModel)
         {
             ViewModelChanged?.Invoke(currentViewModel);

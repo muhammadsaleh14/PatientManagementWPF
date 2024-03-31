@@ -8,23 +8,35 @@
              d:DesignHeight="200"
              d:DesignWidth="200"
              d:Background="White"
-             LostFocus="UserControl_LostFocus"
-             >
+             LostFocus="UserControl_LostFocus">
     <UserControl.Resources>
-        
+
 
     </UserControl.Resources>
     <Grid>
-        <TextBox x:Name="textBox"
-                 HorizontalAlignment="Stretch"
-                 Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}"
-                 TextChanged="TextBox_TextChanged"
-                 BorderBrush="{DynamicResource MaterialDesignTextAreaBorder}"
-                 BorderThickness="1"
-                 Padding="5"
-                 MinWidth="80"
-                 LostFocus="textBox_LostFocus"
-                 PreviewKeyDown="textBox_PreviewKeyDown" />
+        <TextBlock x:Name="hintTextBlock"
+                   Text="{Binding HintText}"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Panel.ZIndex="0" />
+        <Border BorderBrush="{StaticResource MaterialDesignTextAreaBorder}"
+                BorderThickness="1,1,1,0"
+                CornerRadius="2">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <TextBox ScrollViewer.VerticalScrollBarVisibility="Auto" x:Name="textBox"
+                         MaxHeight="114"
+                         Foreground="{StaticResource MaterialDesignLightForeground}"
+                         Panel.ZIndex="1"
+                         HorizontalAlignment="Stretch"
+                         Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         TextChanged="TextBox_TextChanged"
+                         Padding="5"
+                         MinWidth="80"
+                         GotFocus="textBox_GotFocus"
+                         LostFocus="textBox_LostFocus"
+                         PreviewKeyDown="textBox_PreviewKeyDown" />
+            </ScrollViewer>
+        </Border>
         <Popup x:Name="suggestionPopup"
                Height="Auto"
                Width="Auto"
@@ -44,13 +56,12 @@
                 </Style>
             </Popup.Style>
             <ListBox x:Name="suggestionListBox"
-                      MaxHeight="200"
-                      BorderBrush="Black"
-                      BorderThickness="1"
-                      SelectionMode="Single"
+                     MaxHeight="200"
+                     BorderBrush="Black"
+                     BorderThickness="1"
+                     SelectionMode="Single"
                      PreviewMouseDown="suggestionListBox_MouseDown"
-                     MouseDown="suggestionListBox_MouseDown"
-                     >
+                     MouseDown="suggestionListBox_MouseDown">
                 <ListBox.ItemTemplate>
 
                     <DataTemplate>
@@ -67,7 +78,7 @@
                                 <Setter Property="FontWeight"
                                         Value="ExtraBold" />
                                 <Setter Property="Foreground"
-                                        Value="{DynamicResource PrimaryHueDarkBrush}" />
+                                        Value="{StaticResource PrimaryHueDarkBrush}" />
 
                             </Trigger>
                         </Style.Triggers>

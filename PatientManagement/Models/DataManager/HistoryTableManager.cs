@@ -37,6 +37,7 @@ namespace PatientManagement.Models.DataManager
             }
 
             // Ensure finalHistoryTable is retrieved and return it
+
             HistoryTable? finalHistoryTable = db.HistoryTables
                 .Include(h => h.HistoryItems)
                     .ThenInclude(i => i.HistoryHeading)

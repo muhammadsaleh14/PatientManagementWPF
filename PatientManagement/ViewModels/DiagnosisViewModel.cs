@@ -85,8 +85,10 @@ namespace PatientManagement.ViewModels
             }
         }
 
+
         public DiagnosisViewModel(PatientStore patientStore, bool isConfigWindow)
         {
+
             _patientStore = patientStore;
             _addDiagnosisHeadingText = string.Empty;
             _allDiagnosisHeadings = new ObservableCollection<DiagnosisHeadingViewModel>();
@@ -94,7 +96,7 @@ namespace PatientManagement.ViewModels
             AddDiagnosisHeadingCommand = new RelayCommand(AddDiagnosisHeading, CanAddDiagnosisHeading);
             if (!isConfigWindow)
             {
-
+                _patientStore.AllDiagnosisDetails = DiagnosisManager.getAllDiagnosisDetails();
                 string currentVisitId = _patientStore.CurrentVisitId ?? throw new Exception("Visitid is not availible for diagnosis");
                 _diagnosisItems = DiagnosisItemViewModelProjection(DiagnosisManager.getDiagnosisForVisit(currentVisitId));
             }
