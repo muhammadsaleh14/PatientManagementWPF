@@ -79,15 +79,14 @@
                 <DataTemplate>
                     <StackPanel HorizontalAlignment="Stretch">
                         <DockPanel LastChildFill="False"
-                                    HorizontalAlignment="Stretch">
+                                   HorizontalAlignment="Stretch">
 
-                            <TextBlock 
-                                       Text="{Binding HistoryHeading}"
+                            <TextBlock Text="{Binding HistoryHeading}"
                                        FontWeight="Bold"
-                                       FontSize="16" DockPanel.Dock="Left" />
-                            <Button 
-                                    DockPanel.Dock="Right"
-                                    Width="Auto"
+                                       FontSize="16"
+                                       DockPanel.Dock="Left" />
+                            <Button DockPanel.Dock="Right"
+                                    Padding="3 0"
                                     Command="{Binding Path=DataContext.RemoveHistoryCommand, 
                                             RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                     CommandParameter="{Binding}"

@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Title="Select Delete Option"
         Height="Auto"
-        Width="400">
-    <Grid Height="Auto">
+        Width="Auto">
+    <Grid Height="Auto" Margin="30 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -34,17 +34,17 @@
                     Width="Auto"
                     Padding="10 0"
                     Margin="10"
-                    Click="Yes_Click" />
+                    Click="Delete_For_Patient_Click" />
             <Button Content="Delete for visit"
                     Width="Auto"
                     Padding="10 0"
-                    Margin="10"
-                    Click="No_Click" />
+                    Margin="3"
+                    Click="Delete_For_Visit_Click" />
         </StackPanel>
         <Button Grid.Row="3" Content="Cancel"
                 HorizontalAlignment="Center"
                 Width="Auto"
                 Padding="10 0"
-                Click="No_Click" />
+                Click="Cancel_Click" />
     </Grid>
 </Window>

@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace PatientManagement.Views.ConfirmationWindows
 {
@@ -19,9 +7,30 @@ namespace PatientManagement.Views.ConfirmationWindows
     /// </summary>
     public partial class DeleteHistoryItemForPatient : Window
     {
+        public bool isVisit { get; private set; } = true;
+        public bool isCancelled { get; private set; } = true;
+
         public DeleteHistoryItemForPatient()
         {
             InitializeComponent();
+        }
+
+        private void Delete_For_Patient_Click(object sender, RoutedEventArgs e)
+        {
+            isVisit = false;
+            isCancelled = false;
+            Close();
+        }
+        private void Delete_For_Visit_Click(object sender, RoutedEventArgs e)
+        {
+            isVisit = true;
+            isCancelled = false;
+            Close();
+        }
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            isCancelled = true;
+            Close();
         }
     }
 }

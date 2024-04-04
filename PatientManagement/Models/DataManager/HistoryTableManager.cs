@@ -52,13 +52,15 @@ namespace PatientManagement.Models.DataManager
 
         internal static HistoryTable ReturnHistoryTableForVisit(PatientContext db, Visit visit)
         {
-            HistoryTable? historytable = db.HistoryTables.Include(h => h.HistoryItems)
+            var dbHistoryTable = db.HistoryTables
+                .Include(h => h.HistoryItems)
                         .ThenInclude(i => i.HistoryHeading)
-                    .FirstOrDefault(h => h.InitialVisitId == visit.Id);
-            if (historytable != null)
+                        .FirstOrDefault(ht => ht.Id == visit.HistoryTableId);
+            if (dbHistoryTable != null)
             {
-                return historytable;
+                return dbHistoryTable;
             }
+
 
             // Get the patient's visits sorted by date in descending order
             var visits = db.Visits

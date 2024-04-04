@@ -88,7 +88,7 @@ namespace PatientManagement.ViewModels.Items
             }
             if (propertyName == nameof(HistoryDetail))
             {
-                HistoryTable historyTable = HistoryManager.EditHistoryDetailForVisit(_visitId, _historyItem.Id, textValue);
+                HistoryTable historyTable = HistoryManager.EditHistoryDetailForVisit(_visitId, _historyItem, textValue);
                 //_patientStore.ChangeHistoryTable(historyTable);
             }
         }

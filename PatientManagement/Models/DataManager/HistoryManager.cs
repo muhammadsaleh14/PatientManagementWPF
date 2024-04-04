@@ -1,4 +1,5 @@
-﻿using PatientManagement.Models.Contexts;
+﻿using Microsoft.EntityFrameworkCore;
+using PatientManagement.Models.Contexts;
 using PatientManagement.Models.DataEntites;
 using PatientManagement.Models.DataManager.HelperFuntions;
 using System;
@@ -18,7 +19,7 @@ namespace PatientManagement.Models.DataManager
 
             using (var db = context ?? new PatientContext())
             {
-                // Get the visit
+                // Get the currentVisit
 
                 Visit visit = Helper.getVisit(db, visitId);
 
@@ -45,7 +46,7 @@ namespace PatientManagement.Models.DataManager
                 db.HistoryItems.Add(historyItem);
                 db.SaveChanges();
 
-                //visit.HistoryTable.HistoryItems.Add(historyItem);
+                //currentVisit.HistoryTable.HistoryItems.Add(newHistoryItem);
                 //db.SaveChanges();
 
                 return visit.HistoryTable;
@@ -55,7 +56,7 @@ namespace PatientManagement.Models.DataManager
 
 
         //If the heading has changed make a new one or assign the existing ones's id
-        //also remove the heading that was changed from the visit
+        //also remove the heading that was changed from the currentVisit
         internal static HistoryTable EditHistoryHeadingForVisit(string visitId, string oldHeading, string newHeading)
         {
             if (string.IsNullOrWhiteSpace(newHeading))
@@ -100,7 +101,7 @@ namespace PatientManagement.Models.DataManager
 
 
 
-        internal static HistoryTable EditHistoryDetailForVisit(string visitId, string historyItemId, string newDetail)
+        internal static HistoryTable EditHistoryDetailForVisit(string visitId, HistoryItem historyItem, string newDetail)
         {
             using (var db = new PatientContext())
             {
@@ -116,14 +117,19 @@ namespace PatientManagement.Models.DataManager
 
                 visit.HistoryTable = historyTable;
 
-                HistoryItem? historyItem = visit.HistoryTable.HistoryItems.FirstOrDefault(i => i.Id == historyItemId);
-
-                if (historyItem == null)
+                string? matchByHeadingString = db.HistoryItems.FirstOrDefault(h => h.Id == historyItem.Id)?.HistoryHeading.Heading;
+                if (matchByHeadingString == null)
                 {
-                    throw new Exception("No such history record exists with id:" + historyItemId);
+                    throw new Exception("Heading not found");
+                }
+                HistoryItem? newHistoryItem = visit.HistoryTable.HistoryItems.FirstOrDefault(i => i.HistoryHeading.Heading == matchByHeadingString);
+
+                if (newHistoryItem == null)
+                {
+                    throw new Exception("No such history record exists with id:" + newHistoryItem);
                 }
 
-                historyItem.Detail = newDetail;
+                newHistoryItem.Detail = newDetail;
 
                 db.SaveChanges();
 
@@ -192,5 +198,48 @@ namespace PatientManagement.Models.DataManager
                 return db.HistoryHeadings.Select(historyHeading => historyHeading.Heading).Distinct().ToList();
             }
         }
+
+        internal static void RemoveHistoryItemFromPatient(string visitId, HistoryItem historyItem)
+        {
+            using (var db = new PatientContext())
+            {
+                Visit? currentVisit = db.Visits.FirstOrDefault(v => v.Id == visitId);
+                HistoryItem? dbHistoryItem = db.HistoryItems.Include(h => h.HistoryHeading).FirstOrDefault(h => h.Id == historyItem.Id);
+
+                if (currentVisit == null)
+                {
+                    throw new Exception("Visit not found");
+                }
+                if (dbHistoryItem == null)
+                {
+                    throw new Exception("History Item with heading not found");
+                }
+
+                var patientVisits = db.Visits.Where(v => v.PatientId == currentVisit.PatientId)
+                    .Include(v => v.HistoryTable)
+                    .ThenInclude(ht => ht.HistoryItems)
+                    .ThenInclude(hi => hi.HistoryHeading);
+
+                foreach (Visit localVisit in patientVisits)
+                {
+                    if (localVisit.HistoryTable == null)
+                    {
+                        continue;
+                    }
+                    var itemToRemove = localVisit.HistoryTable.HistoryItems.FirstOrDefault(h => h.HistoryHeading.Heading == dbHistoryItem.HistoryHeading.Heading);
+
+                    if (itemToRemove != null)
+                    {
+                        // Remove the history item from the list
+                        localVisit.HistoryTable.HistoryItems.Remove(itemToRemove);
+
+                        // Save changes to the database
+                    }
+                }
+                db.SaveChanges();
+
+            }
+        }
+
     }
 }

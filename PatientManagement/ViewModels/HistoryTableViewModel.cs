@@ -4,6 +4,7 @@ using PatientManagement.Models.DataManager;
 using PatientManagement.Stores;
 using PatientManagement.ViewModels.Items;
 using PatientManagement.ViewModels.Managers;
+using PatientManagement.Views.ConfirmationWindows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -99,8 +100,32 @@ namespace PatientManagement.ViewModels
 
             if (obj is HistoryItemViewModel historyItemViewModel && historyItemViewModel.HistoryItem != null)
             {
-                HistoryManager.RemoveHistoryItemFromVisit(_visitid, historyItemViewModel.HistoryItem);
-                HistoryItems.Remove(historyItemViewModel);
+                var deleteForVisitOrPatient = new DeleteHistoryItemForPatient();
+                deleteForVisitOrPatient.ShowDialog();
+
+                if (deleteForVisitOrPatient.isCancelled == true)
+                {
+                    return;
+                }
+
+                if (deleteForVisitOrPatient.isVisit)
+                {
+                    HistoryManager.RemoveHistoryItemFromVisit(_visitid, historyItemViewModel.HistoryItem);
+                    HistoryItems.Remove(historyItemViewModel);
+                }
+                else if (deleteForVisitOrPatient.isVisit == false)
+                {
+                    var confirmDelete = new DeleteConfirmationWindow("Deleting all values of: " +
+                        historyItemViewModel.HistoryItem.HistoryHeading.Heading);
+                    confirmDelete.ShowDialog();
+                    if (confirmDelete.Confirmed)
+                    {
+                        HistoryManager.RemoveHistoryItemFromPatient(_visitid, historyItemViewModel.HistoryItem);
+                        HistoryItems.Remove(historyItemViewModel);
+                    }
+
+                }
+
             }
 
         }

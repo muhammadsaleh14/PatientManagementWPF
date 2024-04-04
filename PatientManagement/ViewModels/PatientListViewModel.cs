@@ -141,9 +141,13 @@ namespace PatientManagement.ViewModels
                     Visit? newVisit = VisitManager.AddVisitToPatient(patient.Id);
                     if (newVisit != null)
                     {
+                        HistoryManager.getHistoryTableForVisit(newVisit.Id);
+
+
                         //this is a bit of a shortcut as it will refetch all the visits from the database
                         //and also change the focus of the listView
                         _patientStore.ChangePatientSelection(patient);
+
                     }
                 }
 
