@@ -13,6 +13,8 @@ namespace PatientManagement.Views.ConfirmationWindows
         public DeleteHistoryItemForPatient()
         {
             InitializeComponent();
+            this.SizeToContent = SizeToContent.Height;
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
         private void Delete_For_Patient_Click(object sender, RoutedEventArgs e)

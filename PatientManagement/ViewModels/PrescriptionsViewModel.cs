@@ -19,6 +19,19 @@ namespace PatientManagement.ViewModels
 
         private string _visitId;
 
+        private string _messageText;
+
+        public string MessageText
+        {
+            get { return _messageText; }
+            set
+            {
+                _messageText = value;
+                OnPropertyChanged(nameof(MessageText));
+            }
+        }
+
+
         private string _addMedicineText = "";
         public string AddMedicineText
         {
@@ -123,6 +136,7 @@ namespace PatientManagement.ViewModels
 
         public PrescriptionsViewModel(PatientStore patientStore)
         {
+            _messageText = string.Empty;
             _patientStore = patientStore;
             _visitId = patientStore.CurrentVisitId ?? throw new Exception("Visit Id is null");
             _prescriptionsList = new ObservableCollection<Prescription>(PrescriptionManager.getPatientVisitPrescriptions(_visitId));
@@ -196,7 +210,7 @@ namespace PatientManagement.ViewModels
             }
             catch (Exception e)
             {
-                throw e;
+                MessageText = "Error: " + e.Message;
             }
 
         }

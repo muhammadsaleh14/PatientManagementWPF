@@ -135,6 +135,7 @@ namespace PatientManagement.ViewModels
             catch (Exception ex)
             {
                 isDuplicate = true;
+                ErrorMessage = "Error: " + ex.Message;
                 return;
             }
 

@@ -10,7 +10,9 @@
              d:DesignHeight="1122.24"
              d:DesignWidth="793.92"
              d:Background="White">
+    <UserControl.Resources>
 
+    </UserControl.Resources>
     <DockPanel LastChildFill="True"
                Grid.ColumnSpan="2">
         <printlayout:PrintHeader DockPanel.Dock="Top" />
@@ -32,36 +34,100 @@
 
             </StackPanel>
         </Grid>
-        <Grid Margin="0 20">
+        <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition  Width="1*"/>
-                <ColumnDefinition  Width="2*"/>
+                <ColumnDefinition  Width="1*" />
+                <ColumnDefinition  Width="Auto" />
+                <ColumnDefinition  Width="Auto" />
             </Grid.ColumnDefinitions>
-            <components:DiagnosisControl  Grid.Column="0" />
-            <StackPanel Grid.Column="1">
-                <Label Content="Prescriptions"
-                       HorizontalAlignment="Center" />
+            <printlayout:PrintDiagnosisControl Grid.Column="0" />
+            <Border Grid.Column="1"
+                    Margin="0 0 20 0"
+                    BorderThickness="1,0,1,0"
+                    BorderBrush="{StaticResource MaterialDesignTextBoxBorder}"
+                    VerticalAlignment="Stretch" />
+            <StackPanel Grid.Column="2"
+                        HorizontalAlignment="Center">
+                <TextBlock Text="PRESCRIPTIONS"
+                           HorizontalAlignment="Center"
+                           FontWeight="Bold" />
                 <ListView HorizontalAlignment="Center"
                           Width="Auto"
                           DataContext="{Binding PrescriptionsViewModel}"
                           ItemsSource="{Binding PrescriptionsList,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}">
+
                     <ListView.View>
                         <GridView>
+                            <GridView.ColumnHeaderContainerStyle>
+                                <Style TargetType="{x:Type GridViewColumnHeader}"
+                                       BasedOn="{StaticResource MaterialDesignFlatButton}">
+                                    <Setter Property="Padding"
+                                            Value="4,2" />
+                                    <Setter Property="Foreground"
+                                            Value="{StaticResource MaterialDesignLightForeground}" />
+                                    <Setter Property="FontWeight"
+                                            Value="Bold" />
+                                </Style>
+                            </GridView.ColumnHeaderContainerStyle>
                             <!-- Column for Medicine Name -->
                             <GridViewColumn Header="Medicine"
-                                            DisplayMemberBinding="{Binding Medicine.MedicineName}"
-                                            Width="Auto" />
+                                            Width="200">
+                                <GridViewColumn.HeaderTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="Medicine"
+                                                   FontWeight="ExtraBold" />
+                                    </DataTemplate>
+                                </GridViewColumn.HeaderTemplate>
+
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock MaxWidth="200"
+                                                   Text="{Binding Medicine.MedicineName}"
+                                                   TextWrapping="Wrap"
+                                                   HorizontalAlignment="Stretch" />
+
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
 
                             <!-- Column for Dosage -->
                             <GridViewColumn Header="Dosage"
-                                            DisplayMemberBinding="{Binding Dosage.Dose}"
-                                            Width="Auto" />
+                                            Width="Auto">
+                                <GridViewColumn.HeaderTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="Dosage"
+                                                   FontWeight="ExtraBold" />
+                                    </DataTemplate>
+                                </GridViewColumn.HeaderTemplate>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock MaxWidth="200"
+                                                   Text="{Binding Dosage.Dose}"
+                                                   TextWrapping="Wrap" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
 
                             <!-- Column for Duration -->
                             <GridViewColumn Header="Duration"
-                                            DisplayMemberBinding="{Binding Duration.DurationTime}"
-                                            Width="Auto" />
+                                            Width="100">
+                                <GridViewColumn.HeaderTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="Duration"
+                                                   FontWeight="ExtraBold" />
+                                    </DataTemplate>
+                                </GridViewColumn.HeaderTemplate>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock MaxWidth="200"
+                                                   Text="{Binding Duration.DurationTime}"
+                                                   TextWrapping="Wrap" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                         </GridView>
+
                     </ListView.View>
                 </ListView>
             </StackPanel>

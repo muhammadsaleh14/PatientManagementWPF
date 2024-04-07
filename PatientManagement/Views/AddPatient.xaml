@@ -19,7 +19,7 @@
     <Window.Resources>
         <local:RadioButtonConverter  x:Key="RadioButtonConverter" />
     </Window.Resources>
-    <Grid RenderTransformOrigin="0.398,0.74">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="70" />
             <RowDefinition Height="220" />

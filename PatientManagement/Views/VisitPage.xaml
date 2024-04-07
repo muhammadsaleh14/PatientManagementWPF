@@ -37,10 +37,12 @@
 
                 <Button DockPanel.Dock="Right"
                         Content="Go Back "
+                        IsTabStop="False"
                         Command="{Binding OpenPatientsViewCommand}"
                         Margin="10 0" />
                 <Button DockPanel.Dock="Right"
                         Margin="10 0 0 0"
+                        IsTabStop="False"
                         Content="Print Prescription"
                         Command="{Binding PrintPrescriptionCommand}" />
 
@@ -51,11 +53,11 @@
                            FontWeight="Bold"
                            Text="{Binding SavingText}" />
 
-                <StackPanel Orientation="Horizontal"
+                <WrapPanel Orientation="Horizontal"
                             DockPanel.Dock="Top"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center">
-                    <Label Content="Name" />
+                    <Label Content="Name"/>
                     <Border CornerRadius="3"
                             BorderThickness="1"
                             BorderBrush="{DynamicResource MaterialDesignTextBoxBorder}">
@@ -85,11 +87,11 @@
                     </Border>
 
 
-                </StackPanel>
+                </WrapPanel>
 
             </DockPanel>
 
-            <WrapPanel MaxWidth="900"
+            <WrapPanel MaxWidth="900" 
                        Grid.Row="1"
                        Orientation="Horizontal">
                 <Label Margin="0 0 0 0"

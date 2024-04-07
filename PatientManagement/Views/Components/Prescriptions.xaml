@@ -18,11 +18,13 @@
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" HorizontalAlignment="Center">
-            Prescriptions
+        <Label Grid.Row="0"
+               HorizontalAlignment="Center">
+            PRESCRIPTIONS
         </Label>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
+                <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
@@ -33,10 +35,7 @@
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="1"
-                       Grid.Row="0"
-                       HorizontalAlignment="Center"
-                       Text="Add Prescription" />
+
             <TextBlock Grid.Column="0"
                        Grid.Row="1"
                        HorizontalAlignment="Center"
@@ -72,18 +71,18 @@
                 </ComboBox.Style>
             </ComboBox>-->
             <custom:AutocompleteTextBox HorizontalAlignment="Stretch"
-                                      Grid.Column="1"
-                                      Grid.Row="2"
-                                      HintText="Enter dosage amount"
-                                      AutocompleteSuggestions="{Binding AllDosages}"
-                                      Text="{Binding AddDosageText,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
-            
+                                        Grid.Column="1"
+                                        Grid.Row="2"
+                                        HintText="Enter dosage amount"
+                                        AutocompleteSuggestions="{Binding AllDosages}"
+                                        Text="{Binding AddDosageText,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
+
             <custom:AutocompleteTextBox HorizontalAlignment="Stretch"
-                                      Grid.Column="2"
-                                      Grid.Row="2"
-                                      HintText="Enter duration"
-                                      AutocompleteSuggestions="{Binding AllDurations}"
-                                      Text="{Binding AddDurationText,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
+                                        Grid.Column="2"
+                                        Grid.Row="2"
+                                        HintText="Enter duration"
+                                        AutocompleteSuggestions="{Binding AllDurations}"
+                                        Text="{Binding AddDurationText,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             <Button x:Name="submit"
                     Command="{Binding AddPrescriptionCommand}"
                     Grid.Row="3"
@@ -93,6 +92,10 @@
                     Height="Auto"
                     Margin="10"
                     Padding="0" />
+            <TextBlock Grid.Row="4"
+                       Text="{Binding MessageText,UpdateSourceTrigger=PropertyChanged}"
+                       Grid.ColumnSpan="3"
+                       HorizontalAlignment="Center" />
         </Grid>
         <ListView HorizontalAlignment="Center"
                   Width="Auto"

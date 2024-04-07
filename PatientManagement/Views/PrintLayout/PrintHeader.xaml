@@ -27,6 +27,10 @@
         </Style>
     </UserControl.Resources>
     <Grid DockPanel.Dock="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
@@ -75,7 +79,9 @@
                        TextAlignment="Center"
                        Text="سابقہ آئی سرجن:الشفاء ٹرسٹ آنکھ ہسپتال راولپنڈی" />
             <TextBlock  Text="" />
-
+    
         </StackPanel>
+        <Border Grid.Row="1" Grid.ColumnSpan="2" BorderThickness="1" BorderBrush="{StaticResource MaterialDesignTextBoxBorder}" />
+
     </Grid>
 </UserControl>

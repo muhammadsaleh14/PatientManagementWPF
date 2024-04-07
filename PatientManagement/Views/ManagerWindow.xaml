@@ -37,7 +37,12 @@
                    FontWeight="Bold"
                    Grid.Column="1"
                    Text="Edit Configuration" />
-        <managers:DiagnosisManager Grid.Row="1"/>
-
+        <Border Grid.Row="1"
+                Margin="10 0 0 20"
+                BorderThickness="1"
+                Height="Auto"
+                BorderBrush="{StaticResource MaterialDesignTextAreaBorder}">
+            <managers:DiagnosisManager />
+        </Border>
     </Grid>
 </Window>

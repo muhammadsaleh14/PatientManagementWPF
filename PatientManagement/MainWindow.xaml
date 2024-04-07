@@ -17,6 +17,7 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Height="450" Width="800">
+    
     <Grid>
         <Grid.Resources>
             <DataTemplate DataType="{x:Type viewmodelManagers:PatientsViewModel}">

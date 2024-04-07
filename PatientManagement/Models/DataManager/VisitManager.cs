@@ -23,41 +23,36 @@ namespace PatientManagement.Models.DataManager
         {
             using (var db = new PatientContext()) // Use PatientContext instead of VisitContext
             {
-                try
+
+                // Find the visits by ID
+                if (patientId != null)
                 {
-                    // Find the visits by ID
-                    if (patientId != null)
-                    {
-                        var visits = db.Visits;
-                        Debug.WriteLine("patient ID" + patientId);
+                    var visits = db.Visits;
+                    Debug.WriteLine("patient ID" + patientId);
 
-                        // Create a new instance of the VisitPage class
-                        Visit newVisit = new(id: null, patientId: patientId, optionalDetail: null, date: DateTime.Now);
+                    // Create a new instance of the VisitPage class
+                    Visit newVisit = new(id: null, patientId: patientId, optionalDetail: null, date: DateTime.Now);
 
-                        // Add the new visit to the visits's list of visits
-                        visits.Add(newVisit);
-                        // Save changes to the database
-                        db.SaveChanges();
+                    // Add the new visit to the visits's list of visits
+                    visits.Add(newVisit);
+                    // Save changes to the database
+                    db.SaveChanges();
 
-                        // Reload the new visit from the database to get the generated Id
-                        db.Entry(newVisit).GetDatabaseValues();
+                    // Reload the new visit from the database to get the generated Id
+                    db.Entry(newVisit).GetDatabaseValues();
 
-                        DiagnosisManager.CreateDiagnosisForNewVisit(newVisit.Id);
+                    DiagnosisManager.CreateDiagnosisForNewVisit(newVisit.Id);
 
-                        return newVisit;
-                    }
-                    else
-                    {
-                        // Handle case where visits with given ID is not found
-                        Console.WriteLine($"Patient with ID null {patientId} not found.");
-                        return null;
-                    }
+                    return newVisit;
                 }
-                catch (Exception ex)
+                else
                 {
-                    // Handle any exceptions
-                    throw;
+                    // Handle case where visits with given ID is not found
+                    Console.WriteLine($"Patient with ID null {patientId} not found.");
+                    return null;
                 }
+
+
             }
         }
 

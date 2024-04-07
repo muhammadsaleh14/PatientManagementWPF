@@ -7,7 +7,6 @@ using PatientManagement.Views.ConfirmationWindows;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 
@@ -66,7 +65,6 @@ namespace PatientManagement.ViewModels
 
         private void OnPatientSelectionChanged(Patient? patient)
         {
-            Debug.WriteLine("OnPatientSelectionChanged:" + patient.Name);
             IEnumerable<Visit> visits = VisitManager.GetPatientVisitsFromDb(patient?.Id) ?? Enumerable.Empty<Visit>();
             //foreach (VisitPage vis in visits)
             //{

@@ -21,17 +21,17 @@ namespace PatientManagement.ViewModels
 
         public ICommand AddDiagnosisHeadingCommand { get; }
 
-        private string _errorMessage = string.Empty;
-        public string ErrorMessage
+        private string _messageText = string.Empty;
+        public string MessageText
         {
-            get { return _errorMessage; }
+            get { return _messageText; }
             set
             {
-                if (_errorMessage != value)
+                if (_messageText != value)
                 {
 
-                    _errorMessage = value;
-                    OnPropertyChanged(nameof(ErrorMessage));
+                    _messageText = value;
+                    OnPropertyChanged(nameof(MessageText));
                 }
             }
         }
@@ -102,11 +102,14 @@ namespace PatientManagement.ViewModels
             }
             else
             {
+                _patientStore.ErrorDiagosisHeadingViewModel += (string error) => MessageText = error;
                 _patientStore.DiagnosisHeadingPriorityChanged += RefreshDiagnosisHeadingList;
                 _allDiagnosisHeadings = DiagnosisHeadingViewModelProjection(DiagnosisManager.getAllDiagnosisHeadings());
 
             }
         }
+
+
 
         private void RefreshDiagnosisHeadingList()
         {
@@ -143,9 +146,9 @@ namespace PatientManagement.ViewModels
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.Message;
+                MessageText = ex.Message;
                 await Task.Delay(1000);
-                ErrorMessage = string.Empty;
+                MessageText = string.Empty;
                 Debug.WriteLine(ex.StackTrace);
             }
             //DiagnosisManager.AddDiagnosisHeadingText();

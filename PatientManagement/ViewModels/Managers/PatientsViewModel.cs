@@ -1,7 +1,6 @@
 ﻿using PatientManagement.Commands;
 using PatientManagement.Stores;
 using PatientManagement.Views;
-using System;
 using System.Windows.Input;
 
 namespace PatientManagement.ViewModels.Managers
@@ -37,11 +36,14 @@ namespace PatientManagement.ViewModels.Managers
 
         private void ShowAddPatientWindow(PatientStore patientStore)
         {
-            Console.WriteLine("show patient add window");
+
             AddPatient addPatientWin = new AddPatient();
             AddPatientViewModel addPatientViewModel = new AddPatientViewModel(patientStore);
             addPatientWin.DataContext = addPatientViewModel;
+            patientStore.AddPatientWindowOpened -= ShowAddPatientWindow;
             addPatientWin.ShowDialog();
+            patientStore.AddPatientWindowOpened += ShowAddPatientWindow;
+
         }
     }
 }

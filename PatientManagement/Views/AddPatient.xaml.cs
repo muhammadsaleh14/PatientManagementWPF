@@ -15,6 +15,7 @@ namespace PatientManagement.Views
             InitializeComponent();
         }
 
+
         private void age_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
 

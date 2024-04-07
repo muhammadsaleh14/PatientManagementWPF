@@ -172,7 +172,7 @@ namespace PatientManagement.CustomComponents
                     if (suggestionListBox.SelectedItem != null)
                     {
                         textBox.Text = suggestionListBox.SelectedItem.ToString();
-                        textBox.CaretIndex = textBox.Text.Length;
+                        textBox.CaretIndex = textBox.Text?.Length ?? 0;
                         _isTextAutoCompleted = true;
                         suggestionPopup.IsOpen = false;
                     }

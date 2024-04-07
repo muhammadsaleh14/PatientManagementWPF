@@ -1,49 +1,79 @@
 ﻿<UserControl x:Class="PatientManagement.Views.Components.PatientsList"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:PatientManagement.Views.Components"
              xmlns:viewmodels="clr-namespace:PatientManagement.ViewModels"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="600">
-    
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="600">
+
     <Grid d:Background="White">
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
-            <RowDefinition/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0">
-            <TextBlock.Text>Patients List</TextBlock.Text>
-        </TextBlock>
+        <StackPanel Grid.Row="0"
+                    Orientation="Vertical">
+            <TextBlock>Patients List</TextBlock>
+            <Border BorderBrush="{StaticResource MaterialDesignTextAreaBorder}"
+                    BorderThickness="1"
+                    HorizontalAlignment="Center"
+                    Padding="5 2"
+                    CornerRadius="10">
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                    <fa:FontAwesome FontSize="16"
+                                    Icon="Search"
+                                    VerticalAlignment="Center" />
+                    <TextBox Text="{Binding SearchPatientText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                             MinWidth="50" />
+                </StackPanel>
+            </Border>
 
-        <ListView Width="600" Grid.Row="1" 
-                  ItemsSource="{Binding Patients}"
+        </StackPanel>
+        <TextBlock Grid.Row="1"
+                   Text="{Binding MessageText,UpdateSourceTrigger=PropertyChanged}"
+                   FontStyle="Oblique"
+                   Foreground="{StaticResource MaterialDesignValidationErrorBrush}" />
+        <ListView Width="600"
+                  Grid.Row="2"
+                  ItemsSource="{Binding FilteredPatients}"
                   SelectedItem="{Binding SelectedPatient, Mode=TwoWay}"
                   SelectionChanged="ListView_SelectionChanged">
             <!--<ListView.HorizontalAlignment>Stretch</ListView.HorizontalAlignment>-->
             <ListView.View>
                 <GridView>
-                    <GridViewColumn  Header="Name" DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn   Header="Age" DisplayMemberBinding="{Binding Age}" />
-                    <GridViewColumn Header="Gender" DisplayMemberBinding="{Binding Gender}" />
-                    <GridViewColumn >
+                    <GridViewColumn  Header="Name"
+                                     DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn   Header="Age"
+                                      DisplayMemberBinding="{Binding Age}" />
+                    <GridViewColumn Header="Gender"
+                                    DisplayMemberBinding="{Binding Gender}" />
+                    <GridViewColumn>
                         <GridViewColumn.Header>Options</GridViewColumn.Header>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal" DataContext="{Binding}">
+                                <StackPanel Orientation="Horizontal"
+                                            DataContext="{Binding}">
                                     <!-- Add Visit Button -->
-                                    <Button Content="Add Visit" Command="{Binding Path=DataContext.AddVisitCommand, 
+                                    <Button Content="Add Visit"
+                                            Command="{Binding Path=DataContext.AddVisitCommand, 
                                         RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                            CommandParameter="{Binding}"/>
+                                            CommandParameter="{Binding}" />
 
                                     <!-- Edit Button -->
-                                    <Button Content="Edit" Command="{Binding Path=DataContext.EditPatientCommand, 
+                                    <Button Content="Edit"
+                                            Command="{Binding Path=DataContext.EditPatientCommand, 
                                         RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                             CommandParameter="{Binding}"
                                             Margin="0,0,5,0" />
                                     <!-- Delete Button -->
-                                    <Button Content="Delete" Command="{Binding Path=DataContext.DeletePatientCommand, 
+                                    <Button Content="Delete"
+                                            Command="{Binding Path=DataContext.DeletePatientCommand, 
                                         RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                             CommandParameter="{Binding}"
                                             Margin="0,0,5,0" />

@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace PatientManagement.ViewModels
@@ -28,6 +29,11 @@ namespace PatientManagement.ViewModels
         //        return _instance;
         //    }
         //}
+
+
+
+
+
         public ICommand ShowAddPatientCommand { get; set; }
         public ICommand AddVisitCommand { get; }
         public ICommand DeletePatientCommand { get; }
@@ -37,14 +43,55 @@ namespace PatientManagement.ViewModels
 
         public PatientListViewModel(PatientStore patientStore)
         {
+            _messageText = string.Empty;
+            _searchPatientText = string.Empty;
             _patientStore = patientStore;
             _patients = new ObservableCollection<Patient>(PatientManager.getPatientsFromDb() ?? Enumerable.Empty<Patient>());
+            _filteredpatients = _patients;
             ShowAddPatientCommand = new RelayCommand(showAddPatientWindow);
             DeletePatientCommand = new RelayCommand(DeletePatient);
             EditPatientCommand = new RelayCommand(ShowEditpatientWindow);
             AddVisitCommand = new RelayCommand(AddVisit);
             _patientStore.PatientCreated += OnPatientCreated;
             _patientStore.PatientEdited += OnPatientEdited;
+        }
+
+        private async void SearchListForPatientAsync()
+        {
+            var result = new ObservableCollection<Patient>();
+
+            result = await Task.Run(() =>
+            {
+                if (string.IsNullOrWhiteSpace(SearchPatientText))
+                {
+                    result = Patients;
+                    return result;
+                }
+
+                string[] searchParams = SearchPatientText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                string name = string.Empty;
+                int age = 0;
+
+                foreach (var param in searchParams)
+                {
+                    if (int.TryParse(param, out int parsedAge))
+                    {
+                        age = parsedAge;
+                    }
+                    else
+                    {
+                        name += param + " ";
+                    }
+                }
+
+                name = name.Trim();
+
+                // Perform search based on name and age
+                return result = new ObservableCollection<Patient>(Patients.Where(p => p.Name.Contains(name, StringComparison.OrdinalIgnoreCase) && (age == 0 || (age > p.Age - 5 && age < p.Age + 5))));
+            });
+
+            FilteredPatients = result;
         }
 
         private void OnPatientEdited(Patient EditedPatient)
@@ -88,6 +135,17 @@ namespace PatientManagement.ViewModels
             }
         }
 
+        private ObservableCollection<Patient> _filteredpatients;
+        public ObservableCollection<Patient> FilteredPatients
+        {
+            get { return _filteredpatients; }
+            set
+            {
+                _filteredpatients = value;
+                OnPropertyChanged(nameof(FilteredPatients));
+            }
+        }
+
         private ObservableCollection<Patient> _patients;
         public ObservableCollection<Patient> Patients
         {
@@ -96,8 +154,40 @@ namespace PatientManagement.ViewModels
             {
                 _patients = value;
                 OnPropertyChanged(nameof(Patients));
+                FilteredPatients = _patients;
+                SearchListForPatientAsync();
+
             }
         }
+
+        private string _messageText;
+
+        public string MessageText
+        {
+            get { return _messageText; }
+            set
+            {
+                _messageText = value;
+                OnPropertyChanged(nameof(MessageText));
+            }
+
+
+        }
+
+
+        private string _searchPatientText;
+
+        public string SearchPatientText
+        {
+            get { return _searchPatientText; }
+            set
+            {
+                _searchPatientText = value;
+                OnPropertyChanged(nameof(SearchPatientText));
+                SearchListForPatientAsync();
+            }
+        }
+
         private Patient? _selectedPatient;
 
         public Patient? SelectedPatient
@@ -152,7 +242,10 @@ namespace PatientManagement.ViewModels
                 }
 
             }
-            catch (Exception ex) { }
+            catch (Exception ex)
+            {
+                MessageText = "Error: " + ex.Message;
+            }
         }
 
 

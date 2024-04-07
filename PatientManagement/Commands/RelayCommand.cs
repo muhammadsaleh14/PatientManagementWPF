@@ -7,7 +7,6 @@ namespace PatientManagement.Commands
     {
         private readonly Action<object>? _execute;
         private readonly Func<bool>? _canExecute;
-        private Action print;
 
         public RelayCommand(Action<object>? execute)
             : this(execute, null)
@@ -20,14 +19,18 @@ namespace PatientManagement.Commands
             _canExecute = canExecute;
         }
 
-        public RelayCommand(Action print)
-        {
-            this.print = print;
-        }
+
 
         public bool CanExecute(object? parameter) => _canExecute == null || _canExecute();
 
-        public void Execute(object? parameter) => _execute?.Invoke(obj: parameter);
+        public void Execute(object? parameter)
+        {
+            if (parameter == null) throw new ArgumentNullException();
+            if (_execute != null)
+            {
+                _execute.Invoke(parameter);
+            }
+        }
 
         public event EventHandler? CanExecuteChanged
         {

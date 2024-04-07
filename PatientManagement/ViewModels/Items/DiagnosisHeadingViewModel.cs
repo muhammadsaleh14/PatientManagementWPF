@@ -53,8 +53,16 @@ namespace PatientManagement.ViewModels.Items
 
         private void IncreasePriority(object obj)
         {
-            DiagnosisManager.IncreasePriority(DiagnosisHeading);
-            _patientStore.ChangeDiagnosisHeadingPriority();
+            try
+            {
+                DiagnosisManager.IncreasePriority(DiagnosisHeading);
+                _patientStore.ChangeDiagnosisHeadingPriority();
+
+            }
+            catch (Exception ex)
+            {
+                _patientStore.DisplayErrorDiagnosisHeading("Error: " + ex.Message);
+            }
         }
 
 
@@ -74,7 +82,7 @@ namespace PatientManagement.ViewModels.Items
             }
             catch (Exception ex)
             {
-                throw ex;
+                _patientStore.DisplayErrorDiagnosisHeading("Error: " + ex.Message);
             }
 
         }

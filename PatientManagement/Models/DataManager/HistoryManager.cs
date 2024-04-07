@@ -217,7 +217,7 @@ namespace PatientManagement.Models.DataManager
 
                 var patientVisits = db.Visits.Where(v => v.PatientId == currentVisit.PatientId)
                     .Include(v => v.HistoryTable)
-                    .ThenInclude(ht => ht.HistoryItems)
+                    .ThenInclude(ht => ht!.HistoryItems)
                     .ThenInclude(hi => hi.HistoryHeading);
 
                 foreach (Visit localVisit in patientVisits)
