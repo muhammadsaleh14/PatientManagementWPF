@@ -1,4 +1,5 @@
 ﻿using PatientManagement.Commands;
+using PatientManagement.CustomComponents;
 using PatientManagement.Models.DataEntites;
 using PatientManagement.Models.DataManager;
 using PatientManagement.Stores;
@@ -43,7 +44,6 @@ namespace PatientManagement.ViewModels
 
         public PatientListViewModel(PatientStore patientStore)
         {
-            _messageText = string.Empty;
             _searchPatientText = string.Empty;
             _patientStore = patientStore;
             _patients = new ObservableCollection<Patient>(PatientManager.getPatientsFromDb() ?? Enumerable.Empty<Patient>());
@@ -121,18 +121,25 @@ namespace PatientManagement.ViewModels
 
         private void DeletePatient(object obj)
         {
-
-            if (obj is Patient patient)
+            try
             {
-                var confirmationWindow = new DeleteConfirmationWindow("Deleting Patient:" + patient.Name);
-                confirmationWindow.ShowDialog();
-
-                if (confirmationWindow.Confirmed)
+                if (obj is Patient patient)
                 {
-                    PatientManager.DeletePatient(patient);
-                    Patients.Remove(patient);
+                    var confirmationWindow = new DeleteConfirmationWindow("Deleting Patient:" + patient.Name);
+                    confirmationWindow.ShowDialog();
+
+                    if (confirmationWindow.Confirmed)
+                    {
+                        PatientManager.DeletePatient(patient);
+                        Patients.Remove(patient);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Message.MessageText = "Error: " + ex.Message;
+            }
+
         }
 
         private ObservableCollection<Patient> _filteredpatients;
@@ -160,18 +167,16 @@ namespace PatientManagement.ViewModels
             }
         }
 
-        private string _messageText;
+        private Message _message = new Message();
 
-        public string MessageText
+        public Message Message
         {
-            get { return _messageText; }
+            get { return _message; }
             set
             {
-                _messageText = value;
-                OnPropertyChanged(nameof(MessageText));
+                _message = value;
+                OnPropertyChanged(nameof(Message));
             }
-
-
         }
 
 
@@ -244,7 +249,7 @@ namespace PatientManagement.ViewModels
             }
             catch (Exception ex)
             {
-                MessageText = "Error: " + ex.Message;
+                Message.MessageText = "Error: " + ex.Message;
             }
         }
 

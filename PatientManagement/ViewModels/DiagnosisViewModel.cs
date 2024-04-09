@@ -1,4 +1,5 @@
 ﻿using PatientManagement.Commands;
+using PatientManagement.CustomComponents;
 using PatientManagement.Models.DataEntites;
 using PatientManagement.Models.DataManager;
 using PatientManagement.Stores;
@@ -9,7 +10,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace PatientManagement.ViewModels
@@ -21,18 +21,15 @@ namespace PatientManagement.ViewModels
 
         public ICommand AddDiagnosisHeadingCommand { get; }
 
-        private string _messageText = string.Empty;
-        public string MessageText
+        private Message _message = new Message();
+
+        public Message Message
         {
-            get { return _messageText; }
+            get { return _message; }
             set
             {
-                if (_messageText != value)
-                {
-
-                    _messageText = value;
-                    OnPropertyChanged(nameof(MessageText));
-                }
+                _message = value;
+                OnPropertyChanged(nameof(Message));
             }
         }
 
@@ -102,7 +99,7 @@ namespace PatientManagement.ViewModels
             }
             else
             {
-                _patientStore.ErrorDiagosisHeadingViewModel += (string error) => MessageText = error;
+                _patientStore.ErrorDiagosisHeadingViewModel += (string error) => Message.MessageText = error;
                 _patientStore.DiagnosisHeadingPriorityChanged += RefreshDiagnosisHeadingList;
                 _allDiagnosisHeadings = DiagnosisHeadingViewModelProjection(DiagnosisManager.getAllDiagnosisHeadings());
 
@@ -128,7 +125,7 @@ namespace PatientManagement.ViewModels
             }
         }
 
-        private async void AddDiagnosisHeading(object obj)
+        private void AddDiagnosisHeading(object obj)
         {
             try
             {
@@ -146,9 +143,7 @@ namespace PatientManagement.ViewModels
             }
             catch (Exception ex)
             {
-                MessageText = ex.Message;
-                await Task.Delay(1000);
-                MessageText = string.Empty;
+                Message.MessageText = ex.Message;
                 Debug.WriteLine(ex.StackTrace);
             }
             //DiagnosisManager.AddDiagnosisHeadingText();

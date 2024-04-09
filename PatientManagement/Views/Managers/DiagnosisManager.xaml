@@ -52,7 +52,7 @@
 
         <TextBlock Foreground="{StaticResource MaterialDesignValidationErrorBrush}"
                    Grid.Row="2"
-                   Text="{Binding DiagnosisViewModel.MessageText,UpdateSourceTrigger=PropertyChanged}"
+                   Text="{Binding DiagnosisViewModel.Message.MessageText,UpdateSourceTrigger=PropertyChanged}"
                    Height="Auto" />
         <TextBlock Text="Edit Diagnosis Table"
                    Grid.Row="3"

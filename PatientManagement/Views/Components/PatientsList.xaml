@@ -36,7 +36,7 @@
 
         </StackPanel>
         <TextBlock Grid.Row="1"
-                   Text="{Binding MessageText,UpdateSourceTrigger=PropertyChanged}"
+                   Text="{Binding Message.MessageText,UpdateSourceTrigger=PropertyChanged}"
                    FontStyle="Oblique"
                    Foreground="{StaticResource MaterialDesignValidationErrorBrush}" />
         <ListView Width="600"

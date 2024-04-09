@@ -1,9 +1,11 @@
 ﻿using PatientManagement.Commands;
+using PatientManagement.CustomComponents;
 using PatientManagement.Models.DataEntites;
 using PatientManagement.Models.DataManager;
 using PatientManagement.Stores;
 using PatientManagement.ViewModels.Managers;
 using PatientManagement.Views.ConfirmationWindows;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -30,19 +32,26 @@ namespace PatientManagement.ViewModels
 
         private void DeleteVisit(object obj)
         {
-            if (obj is Visit visit)
+            try
             {
-                var confirmationWindow = new DeleteConfirmationWindow("Deleting Visit " +
-                    "\nDate: " + visit.Date + "" +
-                    "\nDetail:" + visit.OptionalDetail);
-                confirmationWindow.ShowDialog();
-                confirmationWindow.Activate();
-
-                if (confirmationWindow.Confirmed)
+                if (obj is Visit visit)
                 {
-                    VisitManager.DeleteVisit(visit);
-                    PatientVisits.Remove(visit);
+                    var confirmationWindow = new DeleteConfirmationWindow("Deleting Visit " +
+                        "\nDate: " + visit.Date + "" +
+                        "\nDetail:" + visit.OptionalDetail);
+                    confirmationWindow.ShowDialog();
+                    confirmationWindow.Activate();
+
+                    if (confirmationWindow.Confirmed)
+                    {
+                        VisitManager.DeleteVisit(visit);
+                        PatientVisits.Remove(visit);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Message.MessageText = ex.Message;
             }
         }
 
@@ -74,6 +83,20 @@ namespace PatientManagement.ViewModels
             PatientVisits = new ObservableCollection<Visit>(visits);
             //OnPropertyChanged(nameof(PatientVisits));
         }
+
+
+        private Message _message = new Message();
+
+        public Message Message
+        {
+            get { return _message; }
+            set
+            {
+                _message = value;
+                OnPropertyChanged(nameof(Message));
+            }
+        }
+
 
         private Patient? _selectedPatient;
         public Patient? SelectedPatient

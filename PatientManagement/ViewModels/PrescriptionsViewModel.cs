@@ -1,4 +1,5 @@
 ﻿using PatientManagement.Commands;
+using PatientManagement.CustomComponents;
 using PatientManagement.Models;
 using PatientManagement.Models.DataManager;
 using PatientManagement.Stores;
@@ -19,15 +20,16 @@ namespace PatientManagement.ViewModels
 
         private string _visitId;
 
-        private string _messageText;
 
-        public string MessageText
+        private Message _message = new Message();
+
+        public Message Message
         {
-            get { return _messageText; }
+            get { return _message; }
             set
             {
-                _messageText = value;
-                OnPropertyChanged(nameof(MessageText));
+                _message = value;
+                OnPropertyChanged(nameof(Message));
             }
         }
 
@@ -136,7 +138,6 @@ namespace PatientManagement.ViewModels
 
         public PrescriptionsViewModel(PatientStore patientStore)
         {
-            _messageText = string.Empty;
             _patientStore = patientStore;
             _visitId = patientStore.CurrentVisitId ?? throw new Exception("Visit Id is null");
             _prescriptionsList = new ObservableCollection<Prescription>(PrescriptionManager.getPatientVisitPrescriptions(_visitId));
@@ -153,22 +154,38 @@ namespace PatientManagement.ViewModels
 
         private void EditPrescription(object obj)
         {
-            if (obj is Prescription prescription)
+            try
             {
-                AddMedicineText = prescription.Medicine.MedicineName;
-                AddDosageText = prescription.Dosage.Dose;
-                AddDurationText = prescription.Duration.DurationTime;
-                DeletePrescription(prescription);
+                if (obj is Prescription prescription)
+                {
+                    AddMedicineText = prescription.Medicine.MedicineName;
+                    AddDosageText = prescription.Dosage.Dose;
+                    AddDurationText = prescription.Duration.DurationTime;
+                    DeletePrescription(prescription);
+                }
+            }
+            catch (Exception ex)
+            {
+                Message.MessageText = "Error: " + ex.Message;
             }
         }
 
         private void DeletePrescription(object obj)
         {
-            if (obj is Prescription prescription)
+            try
             {
-                PrescriptionManager.DeletePrescription(prescription);
-                PrescriptionsList.Remove(prescription);
+
+                if (obj is Prescription prescription)
+                {
+                    PrescriptionManager.DeletePrescription(prescription);
+                    PrescriptionsList.Remove(prescription);
+                }
             }
+            catch (Exception ex)
+            {
+                Message.MessageText = "Error: " + ex.Message;
+            }
+
         }
 
         private bool CanAddPrescription()
@@ -210,7 +227,7 @@ namespace PatientManagement.ViewModels
             }
             catch (Exception e)
             {
-                MessageText = "Error: " + e.Message;
+                Message.MessageText = "Error: " + e.Message;
             }
 
         }

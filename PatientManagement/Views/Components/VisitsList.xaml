@@ -16,6 +16,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0"
@@ -54,9 +55,15 @@
                            Grid.Column="2" />
             </Grid>
         </StackPanel>
-        <ListView  Grid.Row="1"
-                  ItemsSource="{Binding PatientVisits}"
-                  Height="Auto">
+        <TextBlock Grid.Row="1"
+                   x:Name="MessageTextBlock"
+                   HorizontalAlignment="Center"
+                   Text="{Binding Message.MessageText}"
+                   Foreground="{StaticResource MaterialDesignValidationErrorBrush}"
+                   Visibility="Hidden"/>
+        <ListView  Grid.Row="2"
+                   ItemsSource="{Binding PatientVisits}"
+                   Height="Auto">
             <ListView.View>
                 <GridView>
                     <GridView.ColumnHeaderContainerStyle>

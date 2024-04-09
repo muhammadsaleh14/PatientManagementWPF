@@ -25,10 +25,9 @@ namespace PatientManagement.Commands
 
         public void Execute(object? parameter)
         {
-            if (parameter == null) throw new ArgumentNullException();
             if (_execute != null)
             {
-                _execute.Invoke(parameter);
+                _execute.Invoke(parameter!);
             }
         }
 

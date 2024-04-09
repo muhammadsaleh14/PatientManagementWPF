@@ -93,7 +93,8 @@
                     Margin="10"
                     Padding="0" />
             <TextBlock Grid.Row="4"
-                       Text="{Binding MessageText,UpdateSourceTrigger=PropertyChanged}"
+                       Text="{Binding Message.MessageText,UpdateSourceTrigger=PropertyChanged}"
+                       Foreground="{StaticResource MaterialDesignValidationErrorBrush}"
                        Grid.ColumnSpan="3"
                        HorizontalAlignment="Center" />
         </Grid>
