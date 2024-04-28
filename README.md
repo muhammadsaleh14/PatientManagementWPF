@@ -5,6 +5,7 @@ MVVM architecture
 **Technologies Used**
 - Material design
 - .NET core for database manipulation
+- SQLite
 
 **Features:**
  - Save patient data (visits, chronic details, diagnosis details, visit details)
